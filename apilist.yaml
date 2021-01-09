@@ -1,0 +1,54 @@
+# list of endpoints that can be accessed with a GET - used in code generation
+paths:
+# - /Advanced/AdvancedSwitch
+- /CM/DocsisProvision
+- /CM/DsInfo
+- /CM/DsOfdm
+- /CM/Log
+- /CM/SysInfo
+- /CM/UsInfo
+- /CM/UsOfdm
+- /CM/Version
+- /DDNS
+# - /DHCP/Lan
+# - /DHCP/Reservation
+- /DNS
+# - /Firewall/DeviceFilter/Rules
+# - /Firewall/DeviceFilter/Type
+# - /Firewall/Inbound/Rules
+# - /Firewall/Inbound/Status
+# - /Firewall/KeywordFilter/Rules
+# - /Firewall/KeywordFilter/Status
+# - /Firewall/KeywordFilter/TrustRules
+# - /Firewall/Level
+# - /Firewall/ServiceFilter/Rules
+# - /Firewall/ServiceFilter/Status
+# - /Firewall/ServiceFilter/TrustRules
+# - /Firewall/VPN
+- /Hosts
+# - /Router/Backup # This returns a file, maybe handle this later...
+- /Router/Capability
+- /Router/DMZ
+- /Router/Location
+- /Router/PortForward/Status
+- /Router/PortForward/all
+- /Router/PortTrigger/Status
+- /Router/PortTrigger/all
+- /Router/SysInfo
+- /Router/TR069
+- /Time
+# - /USB
+# - /USB/List
+# - /Users/CSRF
+# - /Users/Manage
+# - /Users/Name
+# - /Users/Type
+- /WiFi/AccessControl
+- /WiFi/AccessControl/Status
+# - /WiFi/Client
+- /WiFi/GuestSSID
+- /WiFi/Radios
+- /WiFi/Radios/Advanced
+- /WiFi/Radios/Survey
+- /WiFi/SSIDs
+- /WiFi/WPS
