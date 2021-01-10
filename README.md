@@ -1,6 +1,6 @@
 # Hitron CODA-4x8x Client
 
-A Go client for the Hitron CODA-4x8x DOCSIS 3.1 cable modem/router series.
+A Go client for the [Hitron CODA-4x8x](http://hitron-americas.com/products/service-providers/coda-4680-cable-modem-router/) DOCSIS 3.1 cable modem/router series.
 
 This is tested on a Hitron CODA-4680 with firmware `7.1.1.2.2b9`, untested on
 other models and releases.

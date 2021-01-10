@@ -63,14 +63,16 @@ type CMUsInfo struct {
 type PortInfo struct {
 	PortID         string  // "1"
 	Frequency      int64   // in Hz
-	Bandwidth      int64   // maximum available upstream bandwidth (in bits/sec, maybe?)
 	Modulation     string  // "QAM256"
 	SignalStrength float64 // signal strength of the downstream data channel, in dBmV (decibels above/below 1 millivolt)
-	SNR            float64 // signal-to-noise ratio of the downstream data channel, in dB
 	ChannelID      string  // "11"
-	DsOctets       int64   // number of octets/bytes received
-	Correcteds     int64   // number of blocks received that required correction due to corruption, and were corrected.
-	Uncorrect      int64   // number of blocks received that required correction due to corruption, but were unable to be corrected.
+	// upstream-only
+	Bandwidth int64 // maximum available upstream bandwidth (in bits/sec, maybe?)
+	// downstream-only
+	SNR        float64 // signal-to-noise ratio of the downstream data channel, in dB
+	DsOctets   int64   // number of octets/bytes received
+	Correcteds int64   // number of blocks received that required correction due to corruption, and were corrected.
+	Uncorrect  int64   // number of blocks received that required correction due to corruption, but were unable to be corrected.
 }
 
 func unmarshalInt64(in string) (int64, error) {
