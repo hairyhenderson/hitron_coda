@@ -45,7 +45,7 @@ paths:
 # - /Users/Type
 - /WiFi/AccessControl
 - /WiFi/AccessControl/Status
-# - /WiFi/Client
+- /WiFi/Client
 - /WiFi/GuestSSID
 - /WiFi/Radios
 - /WiFi/Radios/Advanced

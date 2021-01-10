@@ -168,6 +168,13 @@ func (c *CableModem) WiFiAccessControlStatus(ctx context.Context) (out WiFiAcces
 	return out, err
 }
 
+// WiFiClient - /WiFi/Client
+func (c *CableModem) WiFiClient(ctx context.Context) (out WiFiClient, err error) {
+	err = c.getJSON(ctx, "/WiFi/Client", &out)
+
+	return out, err
+}
+
 // WiFiGuestSSID - /WiFi/GuestSSID
 func (c *CableModem) WiFiGuestSSID(ctx context.Context) (out WiFiGuestSSID, err error) {
 	err = c.getJSON(ctx, "/WiFi/GuestSSID", &out)

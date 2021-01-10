@@ -566,3 +566,70 @@ func (s *WiFiWPS) UnmarshalJSON(b []byte) error {
 
 	return nil
 }
+
+// WiFiClient -
+type WiFiClient struct {
+	Error
+	Clients []WiFiClientEntry `json:"Client_List"`
+}
+
+// WiFiClientEntry -
+type WiFiClientEntry struct {
+	Index     int
+	Band      string
+	SSID      string
+	Hostname  string
+	MACAddr   net.HardwareAddr
+	AID       int
+	RSSI      int
+	DataRate  int64
+	PhyMode   string
+	Channel   int
+	Bandwidth int64
+}
+
+// UnmarshalJSON - implements json.Unmarshaler
+func (s *WiFiClientEntry) UnmarshalJSON(b []byte) error {
+	raw := struct {
+		AID       string `json:"aid"`
+		Index     int    `json:"index"`
+		Band      string `json:"band"`
+		SSID      string `json:"ssid"`
+		Hostname  string `json:"hostname"`
+		MACAddr   string `json:"mac"`
+		RSSI      string `json:"rssi"`
+		DataRate  string `json:"br"`
+		PhyMode   string `json:"pm"`
+		Channel   string `json:"ch"`
+		Bandwidth string `json:"bw"`
+	}{}
+
+	err := json.Unmarshal(b, &raw)
+	if err != nil {
+		return fmt.Errorf("failed to unmarshal: %w", err)
+	}
+
+	s.AID, _ = strconv.Atoi(raw.AID)
+	s.Index = raw.Index
+	s.Band = raw.Band
+	s.SSID = raw.SSID
+	s.Hostname = raw.Hostname
+	s.MACAddr, _ = net.ParseMAC(raw.MACAddr)
+	s.RSSI, _ = strconv.Atoi(raw.RSSI)
+	s.PhyMode = raw.PhyMode
+	s.Channel, _ = strconv.Atoi(raw.Channel)
+
+	if strings.HasSuffix(raw.Bandwidth, "MHz") {
+		s.Bandwidth, _ = strconv.ParseInt(raw.Bandwidth[0:len(raw.Bandwidth)-3], 10, 64)
+		s.Bandwidth *= 1_000_000
+	}
+
+	if strings.HasSuffix(raw.DataRate, "M") {
+		s.DataRate, _ = strconv.ParseInt(raw.DataRate[0:len(raw.DataRate)-1], 10, 64)
+		// track as bits per second (value was in mebibits/sec)
+		//nolint:gomnd
+		s.DataRate *= 1024 * 1024
+	}
+
+	return nil
+}
