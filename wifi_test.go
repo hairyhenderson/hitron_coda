@@ -422,3 +422,60 @@ func TestWiFiWPS(t *testing.T) {
 		TimeElapsed: 42 * time.Second,
 	}, p)
 }
+
+func TestWiFiClient(t *testing.T) {
+	body := `{"errCode":"000","errMsg":"",
+		"ClientNumberOfEntries":2,
+		"Client_List":[
+			{"index":1,"band":"2.4G","ssid":"CODA","hostname":"foo",
+			"mac":"CA:FE:DE:AD:BE:EF","aid":"1","rssi":"-84","br":"10M",
+			"pm":"IEEE80211_MODE_11NG_HT20","ch":"3","bw":"20MHz"},
+			{"index":2,"band":"5G","ssid":"CODA","hostname":"bar",
+			"mac":"BE:EF:C0:FF:EE:99","aid":"2","rssi":"-28","br":"866M",
+			"pm":"IEEE80211_MODE_11AC_VHT80","ch":"40","bw":"80MHz"}
+		]}`
+
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write([]byte(body))
+	}))
+
+	defer srv.Close()
+	d := &CableModem{credentials{}, mustParse(srv.URL), srv.Client()}
+
+	ctx := context.WithValue(context.Background(), debugLoggerKey{}, t)
+
+	p, err := d.WiFiClient(ctx)
+	assert.NoError(t, err)
+
+	assert.EqualValues(t, WiFiClient{
+		Error: NoError,
+		Clients: []WiFiClientEntry{
+			{
+				Index:     1,
+				AID:       1,
+				Band:      "2.4G",
+				SSID:      "CODA",
+				Hostname:  "foo",
+				MACAddr:   net.HardwareAddr{0xca, 0xfe, 0xde, 0xad, 0xbe, 0xef},
+				RSSI:      -84,
+				DataRate:  10 * 1024 * 1024,
+				PhyMode:   "IEEE80211_MODE_11NG_HT20",
+				Channel:   3,
+				Bandwidth: 20_000_000,
+			},
+			{
+				Index:     2,
+				AID:       2,
+				Band:      "5G",
+				SSID:      "CODA",
+				Hostname:  "bar",
+				MACAddr:   net.HardwareAddr{0xbe, 0xef, 0xc0, 0xff, 0xee, 0x99},
+				RSSI:      -28,
+				DataRate:  866 * 1024 * 1024,
+				PhyMode:   "IEEE80211_MODE_11AC_VHT80",
+				Channel:   40,
+				Bandwidth: 80_000_000,
+			},
+		},
+	}, p)
+}
