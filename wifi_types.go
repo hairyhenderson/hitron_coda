@@ -581,7 +581,7 @@ type WiFiClientEntry struct {
 	Hostname  string
 	MACAddr   net.HardwareAddr
 	AID       int
-	RSSI      int
+	RSSI      int // Received Signal Strength Indicator. Estimated measure of power level that a client is receiving from AP.
 	DataRate  int64
 	PhyMode   string
 	Channel   int

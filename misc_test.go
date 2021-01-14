@@ -54,7 +54,7 @@ func TestDNS(t *testing.T) {
 	defer srv.Close()
 	d := &CableModem{credentials{}, mustParse(srv.URL), srv.Client()}
 
-	ctx := context.WithValue(context.Background(), debugLoggerKey{}, t)
+	ctx := ContextWithDebugLogger(context.Background(), t)
 
 	p, err := d.DNS(ctx)
 	assert.NoError(t, err)
@@ -85,7 +85,7 @@ func TestDDNS(t *testing.T) {
 	defer srv.Close()
 	d := &CableModem{credentials{}, mustParse(srv.URL), srv.Client()}
 
-	ctx := context.WithValue(context.Background(), debugLoggerKey{}, t)
+	ctx := ContextWithDebugLogger(context.Background(), t)
 
 	p, err := d.DDNS(ctx)
 	assert.NoError(t, err)
@@ -121,7 +121,7 @@ func TestHosts(t *testing.T) {
 	defer srv.Close()
 	d := &CableModem{credentials{}, mustParse(srv.URL), srv.Client()}
 
-	ctx := context.WithValue(context.Background(), debugLoggerKey{}, t)
+	ctx := ContextWithDebugLogger(context.Background(), t)
 
 	p, err := d.Hosts(ctx)
 	assert.NoError(t, err)
