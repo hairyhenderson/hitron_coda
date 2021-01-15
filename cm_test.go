@@ -81,7 +81,8 @@ func TestCMDsInfo(t *testing.T) {
 		"dsoctets":"4829493","correcteds":"0","uncorrect":"0"},
 		{"portId":"2","frequency":"603000000","modulation":"QAM256",
 		"signalStrength":"2.000","snr":"37.636","channelId":"9",
-		"dsoctets":"4960133","correcteds":"0","uncorrect":"0"}
+		"dsoctets":"4960133","correcteds":"0","uncorrect":"0"},
+		{"signalStrength":false,"snr":true}
 	]}`
 
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

@@ -50,42 +50,56 @@ type CMDocsisProvision struct {
 // CMDsInfo - Downstream Port Info
 type CMDsInfo struct {
 	Error
-	Ports []PortInfo `json:"Freq_List"`
+	Ports PortInfos `json:"Freq_List"`
 }
 
 // CMUsInfo - Upstream Port Info
 type CMUsInfo struct {
 	Error
-	Ports []PortInfo `json:"Freq_List"`
+	Ports PortInfos `json:"Freq_List"`
+}
+
+// PortInfos -
+type PortInfos []PortInfo
+
+// UnmarshalJSON - implements json.Unmarshaler for the PortInfos type. If one of
+// the PortInfo entries can't be unmarshaled, we just skip it in this case.
+func (p *PortInfos) UnmarshalJSON(b []byte) error {
+	raw := []json.RawMessage{}
+
+	err := json.Unmarshal(b, &raw)
+	if err != nil {
+		return err
+	}
+
+	for _, port := range raw {
+		pt := &PortInfo{}
+
+		if pt.UnmarshalJSON(port) != nil {
+			// if we can't handle it, just skip it
+			continue
+		}
+
+		*p = append(*p, *pt)
+	}
+
+	return err
 }
 
 // PortInfo -
 type PortInfo struct {
-	PortID         string  // "1"
-	Frequency      int64   // in Hz
-	Modulation     string  // "QAM256"
-	SignalStrength float64 // signal strength of the downstream data channel, in dBmV (decibels above/below 1 millivolt)
-	ChannelID      string  // "11"
+	PortID         string  `json:"portId"`                // "1"
+	Frequency      int64   `json:"frequency,string"`      // in Hz
+	Modulation     string  `json:"modulationType"`        // "QAM256"
+	SignalStrength float64 `json:"signalStrength,string"` // signal strength of the downstream channel, in dBmV (dB above/below 1 mV)
+	ChannelID      string  `json:"channelId"`             // "11"
 	// upstream-only
-	Bandwidth int64 // maximum available upstream bandwidth (in bits/sec, maybe?)
+	Bandwidth int64 `json:"bandwidth,string,omitempty"` // maximum available upstream bandwidth (in bits/sec, maybe?)
 	// downstream-only
-	SNR        float64 // signal-to-noise ratio of the downstream data channel, in dB
-	DsOctets   int64   // number of octets/bytes received
-	Correcteds int64   // number of blocks received that required correction due to corruption, and were corrected.
-	Uncorrect  int64   // number of blocks received that required correction due to corruption, but were unable to be corrected.
-}
-
-func unmarshalInt64(in string) (int64, error) {
-	if in != "" && in != "-" {
-		n, err := strconv.ParseInt(in, 10, 64)
-		if err != nil {
-			return 0, fmt.Errorf("failed to unmarshal int64 %q: %w", in, err)
-		}
-
-		return n, nil
-	}
-
-	return 0, nil
+	SNR        float64 `json:"snr,string"`        // signal-to-noise ratio of the downstream data channel, in dB
+	DsOctets   int64   `json:"dsoctets,string"`   // number of octets/bytes received
+	Correcteds int64   `json:"correcteds,string"` // number of blocks that were corrupt, and were corrected.
+	Uncorrect  int64   `json:"uncorrect,string"`  // number of blocks that were corrupt, but were unable to be corrected.
 }
 
 func unmarshalFloat64(in string) (float64, error) {
@@ -102,11 +116,19 @@ func unmarshalFloat64(in string) (float64, error) {
 }
 
 // UnmarshalJSON - implements json.Unmarshaler
-//nolint:gocyclo
 func (p *PortInfo) UnmarshalJSON(b []byte) error {
 	raw := struct {
-		PortID, Frequency, Modulation, ModulationType, Bandwidth,
-		SignalStrength, SNR, ChannelID, DSOctets, Correcteds, Uncorrect string
+		PortID         string `json:"portId"`
+		Frequency      int64  `json:"frequency,string"`
+		Modulation     string
+		ModulationType string
+		Bandwidth      int64 `json:"bandwidth,string"`
+		SignalStrength string
+		SNR            float64 `json:"snr,string"`
+		ChannelID      string
+		DSOctets       int64 `json:"dsoctets,string"`
+		Correcteds     int64 `json:"correcteds,string"`
+		Uncorrect      int64 `json:"uncorrect,string"`
 	}{}
 
 	err := json.Unmarshal(b, &raw)
@@ -116,43 +138,19 @@ func (p *PortInfo) UnmarshalJSON(b []byte) error {
 
 	p.PortID = raw.PortID
 	p.ChannelID = raw.ChannelID
+	p.Frequency = raw.Frequency
+	p.Bandwidth = raw.Bandwidth
+	p.DsOctets = raw.DSOctets
+	p.Correcteds = raw.Correcteds
+	p.Uncorrect = raw.Uncorrect
+	p.SNR = raw.SNR
 
 	p.Modulation = raw.Modulation
 	if raw.Modulation == "" && raw.ModulationType != "" {
 		p.Modulation = raw.ModulationType
 	}
 
-	p.Frequency, err = unmarshalInt64(raw.Frequency)
-	if err != nil {
-		return err
-	}
-
-	p.Bandwidth, err = unmarshalInt64(raw.Bandwidth)
-	if err != nil {
-		return err
-	}
-
-	p.DsOctets, err = unmarshalInt64(raw.DSOctets)
-	if err != nil {
-		return err
-	}
-
-	p.Correcteds, err = unmarshalInt64(raw.Correcteds)
-	if err != nil {
-		return err
-	}
-
-	p.Uncorrect, err = unmarshalInt64(raw.Uncorrect)
-	if err != nil {
-		return err
-	}
-
 	p.SignalStrength, err = unmarshalFloat64(raw.SignalStrength)
-	if err != nil {
-		return err
-	}
-
-	p.SNR, err = unmarshalFloat64(raw.SNR)
 	if err != nil {
 		return err
 	}
