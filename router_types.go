@@ -91,7 +91,7 @@ func (s *RouterSysInfo) UnmarshalJSON(b []byte) error {
 	s.WanRx, _ = strconv.ParseInt(strings.TrimSpace(raw.WanRx), 10, 64)
 	s.WanRxPkts, _ = strconv.ParseInt(strings.TrimSpace(raw.WanRxPkts), 10, 64)
 	s.WanTx, _ = strconv.ParseInt(strings.TrimSpace(raw.WanTx), 10, 64)
-	s.WanTxPkts, _ = strconv.ParseInt(strings.TrimSpace(raw.WanTx), 10, 64)
+	s.WanTxPkts, _ = strconv.ParseInt(strings.TrimSpace(raw.WanTxPkts), 10, 64)
 
 	lanUp, _ := strconv.ParseInt(strings.TrimSpace(raw.SystemLanUptime), 10, 64)
 	s.SystemLanUptime = time.Duration(lanUp) * time.Second
