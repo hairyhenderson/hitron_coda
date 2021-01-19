@@ -33,7 +33,7 @@ func (s *WiFiAccessControlRule) UnmarshalJSON(b []byte) error {
 
 	err := json.Unmarshal(b, &raw)
 	if err != nil {
-		return fmt.Errorf("failed to unmarshal: %w", err)
+		return fmt.Errorf("failed to unmarshal WiFiAccessControlRule %q: %w", string(b), err)
 	}
 
 	s.ID = raw.ID
@@ -55,7 +55,7 @@ func (s *WiFiAccessControl) UnmarshalJSON(b []byte) error {
 
 	err := json.Unmarshal(b, &raw)
 	if err != nil {
-		return fmt.Errorf("failed to unmarshal: %w", err)
+		return fmt.Errorf("failed to unmarshal WiFiAccessControl %q: %w", string(b), err)
 	}
 
 	s.Error = raw.Error
@@ -94,7 +94,7 @@ func (s *WiFiGuestSSID) UnmarshalJSON(b []byte) error {
 
 	err := json.Unmarshal(b, &raw)
 	if err != nil {
-		return fmt.Errorf("failed to unmarshal: %w", err)
+		return fmt.Errorf("failed to unmarshal WiFiGuestSSID %q: %w", string(b), err)
 	}
 
 	s.Error = raw.Error
@@ -152,7 +152,7 @@ func (s *WiFiRadio) UnmarshalJSON(b []byte) error {
 
 	err := json.Unmarshal(b, &raw)
 	if err != nil {
-		return fmt.Errorf("failed to unmarshal: %w", err)
+		return fmt.Errorf("failed to unmarshal WiFiRadio %q: %w", string(b), err)
 	}
 
 	s.Error = raw.Error
@@ -299,7 +299,7 @@ func (s *WiFiRadioAdvanced) UnmarshalJSON(b []byte) error {
 
 	err := json.Unmarshal(b, &raw)
 	if err != nil {
-		return fmt.Errorf("failed to unmarshal: %w", err)
+		return fmt.Errorf("failed to unmarshal WiFiRadioAdvanced %q: %w", string(b), err)
 	}
 
 	s.Error = raw.Error
@@ -398,7 +398,7 @@ func (s *WiFiAP) UnmarshalJSON(b []byte) error {
 
 	err := json.Unmarshal(b, &raw)
 	if err != nil {
-		return fmt.Errorf("failed to unmarshal: %w", err)
+		return fmt.Errorf("failed to unmarshal WiFiAP %q: %w", string(b), err)
 	}
 
 	s.SSID = raw.SSIDName
@@ -471,7 +471,7 @@ func (s *SSID) UnmarshalJSON(b []byte) error {
 
 	err := json.Unmarshal(b, &raw)
 	if err != nil {
-		return fmt.Errorf("failed to unmarshal: %w", err)
+		return fmt.Errorf("failed to unmarshal SSID %q: %w", string(b), err)
 	}
 
 	s.Name = raw.SSIDName
@@ -518,7 +518,7 @@ func (s *GuestSSID) UnmarshalJSON(b []byte) error {
 
 	err := json.Unmarshal(b, &raw)
 	if err != nil {
-		return fmt.Errorf("failed to unmarshal: %w", err)
+		return fmt.Errorf("failed to unmarshal GuestSSID %q: %w", string(b), err)
 	}
 
 	s.Enable = raw.Enable == on
@@ -551,7 +551,7 @@ func (s *WiFiWPS) UnmarshalJSON(b []byte) error {
 
 	err := json.Unmarshal(b, &raw)
 	if err != nil {
-		return fmt.Errorf("failed to unmarshal: %w", err)
+		return fmt.Errorf("failed to unmarshal WiFiWPS %q: %w", string(b), err)
 	}
 
 	s.Error = raw.Error
@@ -606,7 +606,7 @@ func (s *WiFiClientEntry) UnmarshalJSON(b []byte) error {
 
 	err := json.Unmarshal(b, &raw)
 	if err != nil {
-		return fmt.Errorf("failed to unmarshal: %w", err)
+		return fmt.Errorf("failed to unmarshal WiFiClientEntry %q: %w", string(b), err)
 	}
 
 	s.AID, _ = strconv.Atoi(raw.AID)

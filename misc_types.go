@@ -47,7 +47,7 @@ func (s *Time) UnmarshalJSON(b []byte) error {
 
 	err := json.Unmarshal(b, &raw)
 	if err != nil {
-		return fmt.Errorf("failed to unmarshal: %w", err)
+		return fmt.Errorf("failed to unmarshal Time %q: %w", string(b), err)
 	}
 
 	s.Error = raw.Error
@@ -87,7 +87,7 @@ func (s *DNS) UnmarshalJSON(b []byte) error {
 
 	err := json.Unmarshal(b, &raw)
 	if err != nil {
-		return fmt.Errorf("failed to unmarshal: %w", err)
+		return fmt.Errorf("failed to unmarshal DNS %q: %w", string(b), err)
 	}
 
 	s.Error = raw.Error
@@ -127,7 +127,7 @@ func (s *DDNS) UnmarshalJSON(b []byte) error {
 
 	err := json.Unmarshal(b, &raw)
 	if err != nil {
-		return fmt.Errorf("failed to unmarshal: %w", err)
+		return fmt.Errorf("failed to unmarshal DDNS %q: %w", string(b), err)
 	}
 
 	s.Error = raw.Error
@@ -194,7 +194,7 @@ func (s *Host) UnmarshalJSON(b []byte) error {
 
 	err := json.Unmarshal(b, &raw)
 	if err != nil {
-		return fmt.Errorf("failed to unmarshal: %w", err)
+		return fmt.Errorf("failed to unmarshal Host %q: %w", string(b), err)
 	}
 
 	s.Name = raw.HostName

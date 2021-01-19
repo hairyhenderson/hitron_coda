@@ -133,7 +133,7 @@ func (p *PortInfo) UnmarshalJSON(b []byte) error {
 
 	err := json.Unmarshal(b, &raw)
 	if err != nil {
-		return fmt.Errorf("failed to unmarshal PortInfo: %w", err)
+		return fmt.Errorf("failed to unmarshal PortInfo %q: %w", string(b), err)
 	}
 
 	p.PortID = raw.PortID
@@ -192,7 +192,7 @@ func (s *CMSysInfo) UnmarshalJSON(b []byte) error {
 
 	err := json.Unmarshal(b, &raw)
 	if err != nil {
-		return fmt.Errorf("failed to unmarshal SysInfo: %w", err)
+		return fmt.Errorf("failed to unmarshal SysInfo %q: %w", string(b), err)
 	}
 
 	s.Error = raw.Error
@@ -210,17 +210,17 @@ func (s *CMSysInfo) UnmarshalJSON(b []byte) error {
 
 	s.MacAddr, err = net.ParseMAC(raw.MacAddr)
 	if err != nil {
-		return fmt.Errorf("failed to unmarshal SubMask: %w", err)
+		return fmt.Errorf("failed to unmarshal MacAddr %q: %w", raw.MacAddr, err)
 	}
 
 	s.DsDataRate, err = strconv.ParseInt(raw.DsDataRate, 10, 64)
 	if err != nil {
-		return fmt.Errorf("failed to unmarshal DsDataRate: %w", err)
+		return fmt.Errorf("failed to unmarshal DsDataRate %q: %w", raw.DsDataRate, err)
 	}
 
 	s.UsDataRate, err = strconv.ParseInt(raw.UsDataRate, 10, 64)
 	if err != nil {
-		return fmt.Errorf("failed to unmarshal UsDataRate: %w", err)
+		return fmt.Errorf("failed to unmarshal UsDataRate %q: %w", raw.DsDataRate, err)
 	}
 
 	s.Lease = parseDHCPLeaseDuration(raw.Lease)
@@ -316,7 +316,7 @@ func (s *OFDMReceiver) UnmarshalJSON(b []byte) error {
 
 	err := json.Unmarshal(b, &raw)
 	if err != nil {
-		return fmt.Errorf("failed to unmarshal: %w", err)
+		return fmt.Errorf("failed to unmarshal OFDMReceiver %q: %w", string(b), err)
 	}
 
 	s.ID = raw.ID
@@ -369,7 +369,7 @@ func (s *OFDMAChannel) UnmarshalJSON(b []byte) error {
 
 	err := json.Unmarshal(b, &raw)
 	if err != nil {
-		return fmt.Errorf("failed to unmarshal: %w", err)
+		return fmt.Errorf("failed to unmarshal OFDMAChannel %q: %w", string(b), err)
 	}
 
 	s.ID = raw.ID
@@ -413,7 +413,7 @@ func (s *LogEntry) UnmarshalJSON(b []byte) error {
 
 	err := json.Unmarshal(b, &raw)
 	if err != nil {
-		return fmt.Errorf("failed to unmarshal: %w", err)
+		return fmt.Errorf("failed to unmarshal LogEntry %q: %w", string(b), err)
 	}
 
 	s.ID = raw.ID

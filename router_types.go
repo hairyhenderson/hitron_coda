@@ -63,7 +63,7 @@ func (s *RouterSysInfo) UnmarshalJSON(b []byte) error {
 
 	err := json.Unmarshal(b, &raw)
 	if err != nil {
-		return fmt.Errorf("failed to unmarshal: %w", err)
+		return fmt.Errorf("failed to unmarshal RouterSysInfo %q: %w", string(b), err)
 	}
 
 	s.Error = raw.Error
@@ -189,7 +189,7 @@ func (s *RouterCapability) UnmarshalJSON(b []byte) error {
 
 	err := json.Unmarshal(b, &raw)
 	if err != nil {
-		return fmt.Errorf("failed to unmarshal: %w", err)
+		return fmt.Errorf("failed to unmarshal RouterCapability %q: %w", string(b), err)
 	}
 
 	s.Error = raw.Error
@@ -233,7 +233,7 @@ func (s *RouterDMZ) UnmarshalJSON(b []byte) error {
 
 	err := json.Unmarshal(b, &raw)
 	if err != nil {
-		return fmt.Errorf("failed to unmarshal: %w", err)
+		return fmt.Errorf("failed to unmarshal RouterDMZ %q: %w", string(b), err)
 	}
 
 	s.Error = raw.Error
@@ -266,7 +266,7 @@ func (s *RouterPortForwardStatus) UnmarshalJSON(b []byte) error {
 
 	err := json.Unmarshal(b, &raw)
 	if err != nil {
-		return fmt.Errorf("failed to unmarshal: %w", err)
+		return fmt.Errorf("failed to unmarshal RouterPortForwardStatus %q: %w", string(b), err)
 	}
 
 	s.Error = raw.Error
@@ -331,7 +331,7 @@ func (s *PortForwardRule) UnmarshalJSON(b []byte) error {
 
 	err := json.Unmarshal(b, &raw)
 	if err != nil {
-		return fmt.Errorf("failed to unmarshal: %w", err)
+		return fmt.Errorf("failed to unmarshal PortForwardRule %q: %w", string(b), err)
 	}
 
 	s.ID, _ = strconv.Atoi(raw.ID)
@@ -372,7 +372,7 @@ func (s *RouterPortTriggerStatus) UnmarshalJSON(b []byte) error {
 
 	err := json.Unmarshal(b, &raw)
 	if err != nil {
-		return fmt.Errorf("failed to unmarshal: %w", err)
+		return fmt.Errorf("failed to unmarshal RouterPortTriggerStatus %q: %w", string(b), err)
 	}
 
 	s.Error = raw.Error
@@ -415,7 +415,7 @@ func (s *PortTriggerRule) UnmarshalJSON(b []byte) error {
 
 	err := json.Unmarshal(b, &raw)
 	if err != nil {
-		return fmt.Errorf("failed to unmarshal: %w", err)
+		return fmt.Errorf("failed to unmarshal PortTriggerRule %q: %w", string(b), err)
 	}
 
 	s.ID, _ = strconv.Atoi(raw.ID)
