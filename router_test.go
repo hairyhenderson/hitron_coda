@@ -82,7 +82,7 @@ func TestRouterSysInfo(t *testing.T) {
 		WanRx:           139788502458,
 		WanRxPkts:       175946286,
 		WanTx:           18787516468,
-		WanTxPkts:       18787516468,
+		WanTxPkts:       52845543,
 		DNS:             []net.IP{net.ParseIP("127.0.0.1"), net.ParseIP("2607:f2c0::2")},
 		RFMac:           net.HardwareAddr{0x74, 0x9b, 0xde, 0xad, 0xbe, 0xef},
 		SystemLanUptime: 130*time.Hour + 1*time.Minute + 57*time.Second,
