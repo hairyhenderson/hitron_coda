@@ -1,3 +1,5 @@
+![Build](https://github.com/hairyhenderson/hitron_coda/workflows/Build/badge.svg)
+
 # Hitron CODA-4x8x Client
 
 A Go client for the [Hitron CODA-4x8x](http://hitron-americas.com/products/service-providers/coda-4680-cable-modem-router/) DOCSIS 3.1 cable modem/router series.
