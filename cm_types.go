@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net"
-	"strconv"
 	"strings"
 	"time"
 )
@@ -102,19 +101,6 @@ type PortInfo struct {
 	Uncorrect  int64   `json:"uncorrect,string"`  // number of blocks that were corrupt, but were unable to be corrected.
 }
 
-func unmarshalFloat64(in string) (float64, error) {
-	if in != "" && in != "-" {
-		n, err := strconv.ParseFloat(in, 64)
-		if err != nil {
-			return 0, fmt.Errorf("failed to unmarshal float64 %q: %w", in, err)
-		}
-
-		return n, nil
-	}
-
-	return 0, nil
-}
-
 // UnmarshalJSON - implements json.Unmarshaler
 func (p *PortInfo) UnmarshalJSON(b []byte) error {
 	raw := struct {
@@ -150,10 +136,7 @@ func (p *PortInfo) UnmarshalJSON(b []byte) error {
 		p.Modulation = raw.ModulationType
 	}
 
-	p.SignalStrength, err = unmarshalFloat64(raw.SignalStrength)
-	if err != nil {
-		return err
-	}
+	p.SignalStrength = atof64(raw.SignalStrength)
 
 	return nil
 }
@@ -213,16 +196,8 @@ func (s *CMSysInfo) UnmarshalJSON(b []byte) error {
 		return fmt.Errorf("failed to unmarshal MacAddr %q: %w", raw.MacAddr, err)
 	}
 
-	s.DsDataRate, err = strconv.ParseInt(raw.DsDataRate, 10, 64)
-	if err != nil {
-		return fmt.Errorf("failed to unmarshal DsDataRate %q: %w", raw.DsDataRate, err)
-	}
-
-	s.UsDataRate, err = strconv.ParseInt(raw.UsDataRate, 10, 64)
-	if err != nil {
-		return fmt.Errorf("failed to unmarshal UsDataRate %q: %w", raw.DsDataRate, err)
-	}
-
+	s.DsDataRate = atoi64(raw.DsDataRate)
+	s.UsDataRate = atoi64(raw.UsDataRate)
 	s.Lease = parseDHCPLeaseDuration(raw.Lease)
 
 	return nil
@@ -324,9 +299,8 @@ func (s *OFDMReceiver) UnmarshalJSON(b []byte) error {
 		s.FFTType = raw.FFTType
 	}
 
-	// there may be spaces, and may be "NA" or empty - unparseable should just be interpreted as 0
-	s.SubcarrierFreq, _ = strconv.ParseInt(strings.TrimSpace(raw.SubcarrierFreq), 10, 64)
-	s.PLCPower, _ = strconv.ParseFloat(strings.TrimSpace(raw.PLCPower), 64)
+	s.SubcarrierFreq = atoi64(raw.SubcarrierFreq)
+	s.PLCPower = atof64(raw.PLCPower)
 
 	s.PLCLocked = raw.PLCLocked == yes
 	s.NCPLocked = raw.NCPLocked == yes
@@ -377,11 +351,11 @@ func (s *OFDMAChannel) UnmarshalJSON(b []byte) error {
 	s.FFTSize = strings.TrimSpace(raw.FFTVal)
 
 	// there may be spaces, and may be "NA" or empty - unparseable should just be interpreted as 0
-	s.DigAtten, _ = strconv.ParseFloat(strings.TrimSpace(raw.DigAtten), 64)
-	s.DigAttenBo, _ = strconv.ParseFloat(strings.TrimSpace(raw.DigAttenBo), 64)
-	s.ChannelBw, _ = strconv.ParseFloat(strings.TrimSpace(raw.ChannelBw), 64)
-	s.RepPower, _ = strconv.ParseFloat(strings.TrimSpace(raw.RepPower), 64)
-	s.RepPower1_6, _ = strconv.ParseFloat(strings.TrimSpace(raw.RepPower1_6), 64)
+	s.DigAtten = atof64(raw.DigAtten)
+	s.DigAttenBo = atof64(raw.DigAttenBo)
+	s.ChannelBw = atof64(raw.ChannelBw)
+	s.RepPower = atof64(raw.RepPower)
+	s.RepPower1_6 = atof64(raw.RepPower1_6)
 
 	return nil
 }

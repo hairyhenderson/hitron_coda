@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
+	"strconv"
+	"strings"
 )
 
 //go:generate gomplate -c .=apilist.yaml -f methods.go.tmpl -o methods.go
@@ -132,4 +134,18 @@ func (c *CableModem) getJSON(ctx context.Context, path string, o interface{}) er
 	}
 
 	return nil
+}
+
+func atoi64(s string) int64 {
+	//nolint:gomnd
+	i, _ := strconv.ParseInt(strings.TrimSpace(s), 10, 64)
+
+	return i
+}
+
+func atof64(s string) float64 {
+	//nolint:gomnd
+	f, _ := strconv.ParseFloat(strings.TrimSpace(s), 64)
+
+	return f
 }
