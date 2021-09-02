@@ -620,12 +620,12 @@ func (s *WiFiClientEntry) UnmarshalJSON(b []byte) error {
 	s.Channel, _ = strconv.Atoi(raw.Channel)
 
 	if strings.HasSuffix(raw.Bandwidth, "MHz") {
-		s.Bandwidth, _ = strconv.ParseInt(raw.Bandwidth[0:len(raw.Bandwidth)-3], 10, 64)
+		s.Bandwidth = atoi64(raw.Bandwidth[0 : len(raw.Bandwidth)-3])
 		s.Bandwidth *= 1_000_000
 	}
 
 	if strings.HasSuffix(raw.DataRate, "M") {
-		s.DataRate, _ = strconv.ParseInt(raw.DataRate[0:len(raw.DataRate)-1], 10, 64)
+		s.DataRate = atoi64(raw.DataRate[0 : len(raw.DataRate)-1])
 		// track as bits per second (value was in mebibits/sec)
 		//nolint:gomnd
 		s.DataRate *= 1024 * 1024

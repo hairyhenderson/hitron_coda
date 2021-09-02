@@ -1,14 +1,11 @@
 linters-settings:
   govet:
     check-shadowing: true
+    fieldalignment: true
   golint:
     min-confidence: 0
   gocyclo:
     min-complexity: 10
-  maligned:
-    suggest-new: true
-  # dupl:
-  #   threshold: 100
   goconst:
     min-len: 2
     min-occurrences: 4
@@ -45,7 +42,6 @@ linters:
     - gofumpt
     - goheader
     - goimports
-    - golint
     - gomnd
     - gomodguard
     - goprintffuncname
@@ -53,9 +49,7 @@ linters:
     - gosimple
     - govet
     - ineffassign
-    - interfacer
     - lll
-    - maligned
     - misspell
     - nakedret
     - nestif
@@ -63,8 +57,8 @@ linters:
     - noctx
     - nolintlint
     - prealloc
+    - revive
     - rowserrcheck
-    - scopelint
     - sqlclosecheck
     - staticcheck
     - structcheck

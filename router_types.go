@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net"
 	"strconv"
-	"strings"
 	"time"
 )
 
@@ -86,17 +85,17 @@ func (s *RouterSysInfo) UnmarshalJSON(b []byte) error {
 		return fmt.Errorf("failed to parse CIDR %q: %w", raw.PrivLanIP, err)
 	}
 
-	s.LanRx, _ = strconv.ParseInt(strings.TrimSpace(raw.LanRx), 10, 64)
-	s.LanTx, _ = strconv.ParseInt(strings.TrimSpace(raw.LanTx), 10, 64)
-	s.WanRx, _ = strconv.ParseInt(strings.TrimSpace(raw.WanRx), 10, 64)
-	s.WanRxPkts, _ = strconv.ParseInt(strings.TrimSpace(raw.WanRxPkts), 10, 64)
-	s.WanTx, _ = strconv.ParseInt(strings.TrimSpace(raw.WanTx), 10, 64)
-	s.WanTxPkts, _ = strconv.ParseInt(strings.TrimSpace(raw.WanTxPkts), 10, 64)
+	s.LanRx = atoi64(raw.LanRx)
+	s.LanTx = atoi64(raw.LanTx)
+	s.WanRx = atoi64(raw.WanRx)
+	s.WanRxPkts = atoi64(raw.WanRxPkts)
+	s.WanTx = atoi64(raw.WanTx)
+	s.WanTxPkts = atoi64(raw.WanTxPkts)
 
-	lanUp, _ := strconv.ParseInt(strings.TrimSpace(raw.SystemLanUptime), 10, 64)
+	lanUp := atoi64(raw.SystemLanUptime)
 	s.SystemLanUptime = time.Duration(lanUp) * time.Second
 
-	wanUp, _ := strconv.ParseInt(strings.TrimSpace(raw.SystemWanUptime), 10, 64)
+	wanUp := atoi64(raw.SystemWanUptime)
 	s.SystemWanUptime = time.Duration(wanUp) * time.Second
 
 	l, err := tzToLocation(raw.TZ)
