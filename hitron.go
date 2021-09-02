@@ -4,9 +4,11 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"net/http/cookiejar"
+	"net/http/httputil"
 	"net/url"
 	"strconv"
 	"strings"
@@ -20,6 +22,29 @@ type CableModem struct {
 	base        *url.URL
 
 	hc *http.Client
+}
+
+// debugTransport - logs the request and response if debug is enabled
+type debugTransport struct {
+	rt http.RoundTripper
+}
+
+func (t *debugTransport) RoundTrip(req *http.Request) (*http.Response, error) {
+	debugLogger := debugLoggerFromContext(req.Context())
+	if debugLogger == nil {
+		return t.rt.RoundTrip(req)
+	}
+
+	drq, _ := httputil.DumpRequest(req, true)
+	debugLogger.Logf("request: %s", drq)
+
+	resp, err := t.rt.RoundTrip(req)
+	if err == nil {
+		drs, _ := httputil.DumpResponse(resp, true)
+		debugLogger.Logf("response: %s", drs)
+	}
+
+	return resp, err
 }
 
 // New instantiates a default CableModem struct
@@ -40,6 +65,7 @@ func New(host, username, password string) (*CableModem, error) {
 		CheckRedirect: func(req *http.Request, via []*http.Request) error {
 			return http.ErrUseLastResponse
 		},
+		Transport: &debugTransport{http.DefaultTransport},
 	}
 
 	creds := credentials{username, password}
@@ -99,14 +125,35 @@ func debugLoggerFromContext(ctx context.Context) debugLogger {
 }
 
 func (c *CableModem) getJSON(ctx context.Context, path string, o interface{}) error {
+	return c.sendRequest(ctx, http.MethodGet, path, http.NoBody, o)
+}
+
+func (c *CableModem) sendRequest(ctx context.Context, method, path string, body, o interface{}) error {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
 	u := c.url(path).String()
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, u, nil)
+	contentType := ""
+
+	var reqBody io.Reader
+	switch b := body.(type) {
+	case io.Reader:
+		reqBody = b
+	case url.Values:
+		contentType = "application/x-www-form-urlencoded"
+		reqBody = strings.NewReader(b.Encode())
+	default:
+		return fmt.Errorf("unsupported body type %T", body)
+	}
+
+	req, err := http.NewRequestWithContext(ctx, method, u, reqBody)
 	if err != nil {
 		return err
+	}
+
+	if contentType != "" {
+		req.Header.Set("Content-Type", contentType)
 	}
 
 	resp, err := c.hc.Do(req)
@@ -116,10 +163,6 @@ func (c *CableModem) getJSON(ctx context.Context, path string, o interface{}) er
 	defer resp.Body.Close()
 
 	b, err := ioutil.ReadAll(resp.Body)
-
-	// DEBUG
-	debugLoggerFromContext(ctx).Logf("JSON response: %s", string(b))
-
 	if err != nil {
 		return fmt.Errorf("failed to read body: %w", err)
 	}

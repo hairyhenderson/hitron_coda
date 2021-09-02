@@ -154,6 +154,13 @@ func (c *CableModem) Time(ctx context.Context) (out Time, err error) {
 	return out, err
 }
 
+// UsersCSRF - /Users/CSRF
+func (c *CableModem) UsersCSRF(ctx context.Context) (out UsersCSRF, err error) {
+	err = c.getJSON(ctx, "/Users/CSRF", &out)
+
+	return out, err
+}
+
 // WiFiAccessControl - /WiFi/AccessControl
 func (c *CableModem) WiFiAccessControl(ctx context.Context) (out WiFiAccessControl, err error) {
 	err = c.getJSON(ctx, "/WiFi/AccessControl", &out)

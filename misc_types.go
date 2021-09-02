@@ -211,3 +211,8 @@ func (s *Host) UnmarshalJSON(b []byte) error {
 
 	return nil
 }
+
+type UsersCSRF struct {
+	Error
+	CSRF string
+}
