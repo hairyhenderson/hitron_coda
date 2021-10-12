@@ -154,3 +154,24 @@ func TestHosts(t *testing.T) {
 		},
 	}, p)
 }
+
+func TestUsersCSRF(t *testing.T) {
+	body := `{"errCode":"000","errMsg":"","CSRF":"abcdefgh1234.4321abcdefgh"}`
+
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write([]byte(body))
+	}))
+
+	defer srv.Close()
+
+	d := &CableModem{credentials{}, mustParse(srv.URL), srv.Client()}
+	ctx := ContextWithDebugLogger(context.Background(), t)
+
+	p, err := d.UsersCSRF(ctx)
+	assert.NoError(t, err)
+
+	assert.EqualValues(t, UsersCSRF{
+		Error: NoError,
+		CSRF:  "abcdefgh1234.4321abcdefgh",
+	}, p)
+}

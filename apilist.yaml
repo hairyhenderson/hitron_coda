@@ -39,7 +39,7 @@ paths:
 - /Time
 # - /USB
 # - /USB/List
-# - /Users/CSRF
+- /Users/CSRF
 # - /Users/Manage
 # - /Users/Name
 # - /Users/Type
