@@ -5,7 +5,12 @@ import (
 	"fmt"
 	"net"
 	"strconv"
+	"strings"
 	"time"
+
+	"code.cloudfoundry.org/bytefmt"
+	"golang.org/x/text/language"
+	"golang.org/x/text/message"
 )
 
 // RouterSysInfo -
@@ -31,6 +36,109 @@ type RouterSysInfo struct {
 	SystemLanUptime time.Duration    // : "468117",
 	SystemWanUptime time.Duration    // :"468083",
 	RouterMode      string           // :"Dualstack"
+}
+
+//nolint:funlen
+func (s RouterSysInfo) String() string {
+	if s.Error != NoError && s.Error.Message != "" {
+		return s.Error.String()
+	}
+
+	sb := strings.Builder{}
+	sb.WriteString("CMVersion:\n\tDeviceID: ")
+	sb.WriteString(s.CMVersion.DeviceID)
+	sb.WriteString("\n\tModelName: ")
+	sb.WriteString(s.CMVersion.ModelName)
+	sb.WriteString("\n\tVendorName: ")
+	sb.WriteString(s.CMVersion.VendorName)
+	sb.WriteString("\n\tSerialNum: ")
+	sb.WriteString(s.CMVersion.SerialNum)
+	sb.WriteString("\n\tHwVersion: ")
+	sb.WriteString(s.CMVersion.HwVersion)
+	sb.WriteString("\n\tAPIVersion: ")
+	sb.WriteString(s.CMVersion.APIVersion)
+	sb.WriteString("\n\tSoftwareVersion: ")
+	sb.WriteString(s.CMVersion.SoftwareVersion)
+	sb.WriteString("\n")
+
+	sb.WriteString("SystemTime: ")
+	sb.WriteString(s.SystemTime.String())
+	sb.WriteString("\n")
+
+	sb.WriteString("LAN: ")
+	sb.WriteString(s.LANName)
+	sb.WriteString(" (IP ")
+	sb.WriteString(s.PrivLanIP.String())
+	sb.WriteString(") (Net ")
+	sb.WriteString(s.PrivLanNet.String())
+	sb.WriteString(")\n")
+
+	sb.WriteString("	Rx/Tx: ")
+	sb.WriteString(bytefmt.ByteSize(uint64(s.LanRx)))
+	sb.WriteString("/")
+	sb.WriteString(bytefmt.ByteSize(uint64(s.LanTx)))
+	sb.WriteString("\n")
+
+	sb.WriteString("WAN: ")
+	sb.WriteString(s.WanName)
+	sb.WriteString(" (")
+
+	for i, ip := range s.WanIP {
+		if i > 0 {
+			sb.WriteString(", ")
+		}
+
+		sb.WriteString(ip.String())
+	}
+
+	sb.WriteString(")\n")
+
+	sb.WriteString("	Rx/Tx: ")
+	sb.WriteString(bytefmt.ByteSize(uint64(s.WanRx)))
+	sb.WriteString("/")
+	sb.WriteString(bytefmt.ByteSize(uint64(s.WanTx)))
+	sb.WriteString("\n")
+
+	sb.WriteString("	Rx/Tx Packets: ")
+
+	p := message.NewPrinter(language.English)
+	sb.WriteString(p.Sprintf("%d/%d", s.WanRxPkts, s.WanTxPkts))
+
+	sb.WriteString("\n")
+
+	sb.WriteString("DNS: ")
+
+	for i, ip := range s.DNS {
+		if i > 0 {
+			sb.WriteString(", ")
+		}
+
+		sb.WriteString(ip.String())
+	}
+
+	sb.WriteString("\n")
+
+	if s.SecDNS != nil {
+		sb.WriteString("SecDNS: ")
+		sb.WriteString(s.SecDNS.String())
+		sb.WriteString("\n")
+	}
+
+	sb.WriteString("RFMac: ")
+	sb.WriteString(s.RFMac.String())
+	sb.WriteString("\n")
+
+	sb.WriteString("System Uptime: LAN ")
+	sb.WriteString(s.SystemLanUptime.String())
+	sb.WriteString(", WAN ")
+	sb.WriteString(s.SystemWanUptime.String())
+	sb.WriteString("\n")
+
+	sb.WriteString("RouterMode: ")
+	sb.WriteString(s.RouterMode)
+	sb.WriteString("\n")
+
+	return sb.String()
 }
 
 // UnmarshalJSON - implements json.Unmarshaler
@@ -176,6 +284,38 @@ type RouterCapability struct {
 	SIPAlg     bool
 }
 
+func (s RouterCapability) String() string {
+	if s.Error != NoError {
+		return s.Error.String()
+	}
+
+	sb := strings.Builder{}
+	sb.WriteString("RouterMode: ")
+	sb.WriteString(s.RouterMode)
+
+	if s.Gateway {
+		sb.WriteString("/Gateway")
+	}
+
+	if s.UPnP {
+		sb.WriteString("/UPnP")
+	}
+
+	if s.HNAP {
+		sb.WriteString("/HNAP")
+	}
+
+	if s.USB {
+		sb.WriteString("/USB")
+	}
+
+	if s.SIPAlg {
+		sb.WriteString("/SIPAlg")
+	}
+
+	return sb.String()
+}
+
 // UnmarshalJSON - implements json.Unmarshaler
 func (s *RouterCapability) UnmarshalJSON(b []byte) error {
 	raw := struct {
@@ -211,6 +351,14 @@ func (s *RouterCapability) UnmarshalJSON(b []byte) error {
 type RouterLocation struct {
 	Error
 	LocationText string
+}
+
+func (r RouterLocation) String() string {
+	if r.Error != NoError {
+		return r.Error.String()
+	}
+
+	return r.LocationText
 }
 
 // RouterDMZ -
