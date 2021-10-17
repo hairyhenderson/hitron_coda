@@ -50,7 +50,7 @@ func TestLogin(t *testing.T) {
 	hc.Jar = jar
 
 	u := mustParse(srv.URL)
-	d := &CableModem{creds, u, hc}
+	d := &CableModem{credentials: creds, base: u, hc: hc}
 
 	err = d.Login(context.Background())
 	assert.NoError(t, err)
@@ -120,7 +120,7 @@ func TestLogout(t *testing.T) {
 	hc.Jar = jar
 
 	u := mustParse(srv.URL)
-	d := &CableModem{creds, u, hc}
+	d := &CableModem{credentials: creds, base: u, hc: hc}
 
 	err = d.Login(context.Background())
 	assert.NoError(t, err)

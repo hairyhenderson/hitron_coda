@@ -22,7 +22,7 @@ func TestWiFiAccessControl(t *testing.T) {
 	}))
 
 	defer srv.Close()
-	d := &CableModem{credentials{}, mustParse(srv.URL), srv.Client()}
+	d := testCableModem(srv)
 
 	ctx := ContextWithDebugLogger(context.Background(), t)
 
@@ -46,7 +46,7 @@ func TestWiFiAccessControlStatus(t *testing.T) {
 	}))
 
 	defer srv.Close()
-	d := &CableModem{credentials{}, mustParse(srv.URL), srv.Client()}
+	d := testCableModem(srv)
 
 	ctx := ContextWithDebugLogger(context.Background(), t)
 
@@ -71,7 +71,7 @@ func TestWiFiGuestSSID(t *testing.T) {
 	}))
 
 	defer srv.Close()
-	d := &CableModem{credentials{}, mustParse(srv.URL), srv.Client()}
+	d := testCableModem(srv)
 
 	ctx := ContextWithDebugLogger(context.Background(), t)
 
@@ -110,7 +110,7 @@ func TestWiFiRadios(t *testing.T) {
 	}))
 
 	defer srv.Close()
-	d := &CableModem{credentials{}, mustParse(srv.URL), srv.Client()}
+	d := testCableModem(srv)
 
 	ctx := ContextWithDebugLogger(context.Background(), t)
 
@@ -161,7 +161,7 @@ func TestWiFiRadioDetails(t *testing.T) {
 	}))
 
 	defer srv.Close()
-	d := &CableModem{credentials{}, mustParse(srv.URL), srv.Client()}
+	d := testCableModem(srv)
 
 	ctx := ContextWithDebugLogger(context.Background(), t)
 
@@ -216,7 +216,7 @@ func TestWiFiRadiosAdvanced(t *testing.T) {
 	}))
 
 	defer srv.Close()
-	d := &CableModem{credentials{}, mustParse(srv.URL), srv.Client()}
+	d := testCableModem(srv)
 
 	ctx := ContextWithDebugLogger(context.Background(), t)
 
@@ -306,7 +306,7 @@ func TestWiFiRadiosSurvey(t *testing.T) {
 	}))
 
 	defer srv.Close()
-	d := &CableModem{credentials{}, mustParse(srv.URL), srv.Client()}
+	d := testCableModem(srv)
 
 	ctx := ContextWithDebugLogger(context.Background(), t)
 
@@ -360,7 +360,7 @@ func TestWiFiSSIDs(t *testing.T) {
 	}))
 
 	defer srv.Close()
-	d := &CableModem{credentials{}, mustParse(srv.URL), srv.Client()}
+	d := testCableModem(srv)
 
 	ctx := ContextWithDebugLogger(context.Background(), t)
 
@@ -406,7 +406,7 @@ func TestWiFiWPS(t *testing.T) {
 	}))
 
 	defer srv.Close()
-	d := &CableModem{credentials{}, mustParse(srv.URL), srv.Client()}
+	d := testCableModem(srv)
 
 	ctx := ContextWithDebugLogger(context.Background(), t)
 
@@ -440,7 +440,7 @@ func TestWiFiClient(t *testing.T) {
 	}))
 
 	defer srv.Close()
-	d := &CableModem{credentials{}, mustParse(srv.URL), srv.Client()}
+	d := testCableModem(srv)
 
 	ctx := ContextWithDebugLogger(context.Background(), t)
 

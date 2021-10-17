@@ -18,7 +18,7 @@ func TestCMReboot(t *testing.T) {
 
 	defer srv.Close()
 
-	d := &CableModem{credentials{}, mustParse(srv.URL), srv.Client()}
+	d := testCableModem(srv)
 	ctx := ContextWithDebugLogger(context.Background(), t)
 
 	o, err := d.CMReboot(ctx)

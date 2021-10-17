@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+//nolint:govet
 func TestWiFiModeString(t *testing.T) {
 	testdata := []struct {
 		in       WiFiMode

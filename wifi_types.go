@@ -18,17 +18,17 @@ type WiFiAccessControl struct {
 
 // WiFiAccessControlRule -
 type WiFiAccessControlRule struct {
-	ID       int
 	Hostname string
 	MACAddr  net.HardwareAddr
+	ID       int
 }
 
 // UnmarshalJSON - implements json.Unmarshaler
 func (s *WiFiAccessControlRule) UnmarshalJSON(b []byte) error {
 	raw := struct {
-		ID       int
 		Hostname string `json:"hostName"`
 		MACAddr  string `json:"macAddr"`
+		ID       int
 	}{}
 
 	err := json.Unmarshal(b, &raw)
@@ -47,10 +47,9 @@ func (s *WiFiAccessControlRule) UnmarshalJSON(b []byte) error {
 func (s *WiFiAccessControl) UnmarshalJSON(b []byte) error {
 	raw := struct {
 		Error
-
 		BlockType           string
-		RuleNumberOfEntries int
 		RulesList           []WiFiAccessControlRule `json:"Rules_List"`
+		RuleNumberOfEntries int
 	}{}
 
 	err := json.Unmarshal(b, &raw)
@@ -74,11 +73,11 @@ type WiFiAccessControlStatus struct {
 // WiFiGuestSSID -
 type WiFiGuestSSID struct {
 	Error
-	Enable   bool
 	SSID     string
 	SSID5G   string
 	Password string
 	MaxUsers int
+	Enable   bool
 }
 
 // UnmarshalJSON - implements json.Unmarshaler
@@ -244,21 +243,21 @@ type WiFiRadiosAdvanced struct {
 // WiFiRadioAdvanced -
 type WiFiRadioAdvanced struct {
 	Error
-	WiFiRadio
+	RxStream       string
 	SSID           string
 	BGMode         string
 	NOperatingMode string
 	NGuardInterval string
 	TxStream       string
-	RxStream       string
-	NMCS           int
-	NCoexistence   bool
-	NRDG           bool
-	Namsdu         bool
-	Nautoba        bool
-	Nbadecline     bool
-	BandSteering   bool
-	ShowMSO        bool
+	WiFiRadio
+	NMCS         int
+	NCoexistence bool
+	NRDG         bool
+	Namsdu       bool
+	Nautoba      bool
+	Nbadecline   bool
+	BandSteering bool
+	ShowMSO      bool
 }
 
 // UnmarshalJSON - implements json.Unmarshaler
@@ -370,15 +369,15 @@ type WiFiRadiosSurvey struct {
 // WiFiAP - information about a WiFi Access Point/Network
 type WiFiAP struct {
 	Band     string
-	Channel  int
 	SSID     string
-	BSSID    net.HardwareAddr
-	Signal   int    // percentage
+	NT       string
 	WMode    string // W-MODE
 	Security string
-	WPS      bool
 	ExtCh    string
-	NT       string
+	BSSID    net.HardwareAddr
+	Channel  int
+	Signal   int // percentage
+	WPS      bool
 }
 
 // UnmarshalJSON - implements json.Unmarshaler
@@ -424,7 +423,7 @@ type WiFiSSIDs struct {
 
 // SSID -
 type SSID struct {
-	BSSID        net.HardwareAddr
+	DefaultKey   string
 	Name         string `json:"ssidName"`
 	Band         string
 	IfName       string
@@ -433,7 +432,7 @@ type SSID struct {
 	EncryptType  string
 	Passphrase   string
 	URI          string
-	DefaultKey   string
+	BSSID        net.HardwareAddr
 	ID           int
 	Radio        int
 	Enable       bool
@@ -503,9 +502,9 @@ func (s *SSID) UnmarshalJSON(b []byte) error {
 
 // GuestSSID -
 type GuestSSID struct {
-	Enable bool
 	IfName string
 	Relate string
+	Enable bool
 }
 
 // UnmarshalJSON - implements json.Unmarshaler
@@ -575,15 +574,15 @@ type WiFiClient struct {
 
 // WiFiClientEntry -
 type WiFiClientEntry struct {
-	Index     int
 	Band      string
 	SSID      string
 	Hostname  string
+	PhyMode   string
 	MACAddr   net.HardwareAddr
+	Index     int
 	AID       int
 	RSSI      int // Received Signal Strength Indicator. Estimated measure of power level that a client is receiving from AP.
 	DataRate  int64
-	PhyMode   string
 	Channel   int
 	Bandwidth int64
 }
@@ -592,16 +591,16 @@ type WiFiClientEntry struct {
 func (s *WiFiClientEntry) UnmarshalJSON(b []byte) error {
 	raw := struct {
 		AID       string `json:"aid"`
-		Index     int    `json:"index"`
+		DataRate  string `json:"br"`
 		Band      string `json:"band"`
 		SSID      string `json:"ssid"`
 		Hostname  string `json:"hostname"`
 		MACAddr   string `json:"mac"`
 		RSSI      string `json:"rssi"`
-		DataRate  string `json:"br"`
 		PhyMode   string `json:"pm"`
 		Channel   string `json:"ch"`
 		Bandwidth string `json:"bw"`
+		Index     int    `json:"index"`
 	}{}
 
 	err := json.Unmarshal(b, &raw)

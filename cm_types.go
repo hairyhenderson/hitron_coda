@@ -119,10 +119,10 @@ func (p *PortInfos) UnmarshalJSON(b []byte) error {
 // PortInfo -
 type PortInfo struct {
 	PortID         string  `json:"portId"`                // "1"
-	Frequency      int64   `json:"frequency,string"`      // in Hz
 	Modulation     string  `json:"modulationType"`        // "QAM256"
-	SignalStrength float64 `json:"signalStrength,string"` // signal strength of the downstream channel, in dBmV (dB above/below 1 mV)
 	ChannelID      string  `json:"channelId"`             // "11"
+	SignalStrength float64 `json:"signalStrength,string"` // signal strength of the downstream channel, in dBmV (dB above/below 1 mV)
+	Frequency      int64   `json:"frequency,string"`      // in Hz
 	// upstream-only
 	Bandwidth int64 `json:"bandwidth,string,omitempty"` // maximum available upstream bandwidth (in bits/sec, maybe?)
 	// downstream-only
@@ -136,16 +136,16 @@ type PortInfo struct {
 func (p *PortInfo) UnmarshalJSON(b []byte) error {
 	raw := struct {
 		PortID         string `json:"portId"`
-		Frequency      int64  `json:"frequency,string"`
 		Modulation     string
 		ModulationType string
-		Bandwidth      int64 `json:"bandwidth,string"`
 		SignalStrength string
-		SNR            float64 `json:"snr,string"`
 		ChannelID      string
-		DSOctets       int64 `json:"dsoctets,string"`
-		Correcteds     int64 `json:"correcteds,string"`
-		Uncorrect      int64 `json:"uncorrect,string"`
+		SNR            float64 `json:"snr,string"`
+		Frequency      int64   `json:"frequency,string"`
+		Bandwidth      int64   `json:"bandwidth,string"`
+		DSOctets       int64   `json:"dsoctets,string"`
+		Correcteds     int64   `json:"correcteds,string"`
+		Uncorrect      int64   `json:"uncorrect,string"`
 	}{}
 
 	err := json.Unmarshal(b, &raw)
@@ -176,32 +176,30 @@ func (p *PortInfo) UnmarshalJSON(b []byte) error {
 //nolint:lll
 type CMSysInfo struct {
 	Error
+	MacAddr       net.HardwareAddr // WAN MAC address
 	NetworkAccess string           // Permitted/Denied - whether or not your service provider allows you to access the Internet over the CABLE connection.
+	Configname    string           // (??)
 	IP            net.IP           // WAN IP address negotiated by DHCP
 	SubMask       net.IPMask       // WAN Subnet Mask
 	GW            net.IP           // WAN Gateway IP
 	Lease         time.Duration    // WAN DHCP "D: 6 H: 11 M: 10 S: 20"
-	Configname    string           // (??)
 	DsDataRate    int64            // WAN downstream data rate (bits/sec)
 	UsDataRate    int64            // WAN upstream data rate (bits/sec)
-	MacAddr       net.HardwareAddr // WAN MAC address
 }
 
 // UnmarshalJSON - implements json.Unmarshaler
 func (s *CMSysInfo) UnmarshalJSON(b []byte) error {
 	raw := struct {
-		// unmarshals fine
 		Error
 		NetworkAccess string   `json:"ntAccess"`   // "Permitted" (??)
+		Configname    string   `json:"Configname"` // "bac110000106749be82df7e0"
+		SubMask       string   `json:"subMask"`    // "255.255.255.0"
+		Lease         string   `json:"lease"`      // "D: 6 H: 11 M: 10 S: 20"
+		DsDataRate    string   `json:"DsDataRate"` // "1040000000"
+		UsDataRate    string   `json:"UsDataRate"` // "31200000"
+		MacAddr       string   `json:"macAddr"`    // "74:9b:e8:2d:f7:e0"
 		IPs           []net.IP `json:"ip"`         // should only be single element
 		GW            net.IP   `json:"gw"`         // "7.96.63.1"
-		Configname    string   `json:"Configname"` // "bac110000106749be82df7e0"
-		// will need custom unmarshaling
-		SubMask    string `json:"subMask"`    // "255.255.255.0"
-		Lease      string `json:"lease"`      // "D: 6 H: 11 M: 10 S: 20"
-		DsDataRate string `json:"DsDataRate"` // "1040000000"
-		UsDataRate string `json:"UsDataRate"` // "31200000"
-		MacAddr    string `json:"macAddr"`    // "74:9b:e8:2d:f7:e0"
 	}{}
 
 	err := json.Unmarshal(b, &raw)
@@ -299,25 +297,25 @@ type CMDsOfdm struct {
 // OFDMReceiver - OFDM Downstream Receiver information
 //nolint:lll
 type OFDMReceiver struct {
-	ID             int     // OFDM Receiver index
 	FFTType        string  // Type of FFT in use (NA/4K/etc...)
+	ID             int     // OFDM Receiver index
 	SubcarrierFreq int64   // Frequency in Hz of the first OFDM subcarrier
+	PLCPower       float64 // power level the CODA-4x8x has been instructed to use on this OFDM connection by the physical link channel (PLC) data, in dBmV (decibels above/below 1 millivolt).
 	PLCLocked      bool    // whether or not this OFDM connection's Physical Link Channel data is locked. The PLC tells the CODA-4x8x how to decode the OFDM signal, and what power level to use. Once the CODA4x8x receives a PLC without uncorrectable errors, the PLC is locked and subsequent communication can continue.
 	NCPLocked      bool    // whether or not this OFDM connection’s next codeword pointer (NCP) data is locked. The NCP tells the CODA-4x8x which codewords are to be used for OFDM communication, and which profile to use for each codeword. Once the CODA-4x8x receives an NCP without uncorrectable errors, the NCP is locked and subsequent communication can continue.
 	MDC1Locked     bool    // whether or not this OFDM connection’s Multipath Delay Commutator (MDC) data is locked. This provides information about the method of Fast Fourier Transform (FFT) to be used on the OFDM connection. Once the CODA-4x8x receives an MDC1 without errors, the MDC1 is locked and subsequent communication can continue.
-	PLCPower       float64 // power level the CODA-4x8x has been instructed to use on this OFDM connection by the physical link channel (PLC) data, in dBmV (decibels above/below 1 millivolt).
 }
 
 // UnmarshalJSON - implements json.Unmarshaler
 func (s *OFDMReceiver) UnmarshalJSON(b []byte) error {
 	raw := struct {
-		ID             int    `json:"receive"`
 		FFTType        string `json:"ffttype"`
 		SubcarrierFreq string `json:"Subcarr0freqFreq"`
 		PLCLocked      string `json:"plclock"`
 		NCPLocked      string `json:"ncplock"`
 		MDC1Locked     string `json:"mdc1lock"`
 		PLCPower       string `json:"plcpower"`
+		ID             int    `json:"receive"`
 	}{}
 
 	err := json.Unmarshal(b, &raw)
@@ -349,20 +347,19 @@ type CMUsOfdm struct {
 // OFDMAChannel - OFDM/OFDMA Channel
 //nolint:lll
 type OFDMAChannel struct {
+	FFTSize     string  // the type of Fast Fourier Transform in use on the relevant channel.
 	ID          int     // Channel index
-	Enable      bool    //
 	DigAtten    float64 // the digital attenuation, or signal loss, of the transmission medium on which the channel's signal is carried, in decibels (dB).
 	DigAttenBo  float64 // the measured digital attenuation of the channel's signal, in decibels (dB). Digital attenuation is affected by the frequency of the signal; a higher-frequency signal will suffer more attenuation than a lower-frequency signal.
 	ChannelBw   float64 // the bandwidth of this channel, expressed as the number of subchannels multiplied by the channel's Fast Fourier Transform size, in megahertz (MHz).
 	RepPower    float64 // the reported power of this channel, in quarter-decibels above/below 1 millivolt (quarter-dBmV).
 	RepPower1_6 float64 // the target power (P1.6r_n, or power spectral density in 1.6MHz) of this channel, in quarter-decibels above/below 1 millivolt (quarter- dBmV).
-	FFTSize     string  // the type of Fast Fourier Transform in use on the relevant channel.
+	Enable      bool    //
 }
 
 // UnmarshalJSON - implements json.Unmarshaler
 func (s *OFDMAChannel) UnmarshalJSON(b []byte) error {
 	raw := struct {
-		ID          int    `json:"uschindex"`
 		State       string `json:"state"`       // :"  DISABLED"
 		DigAtten    string `json:"digAtten"`    // :"    0.0000"
 		DigAttenBo  string `json:"digAttenBo"`  // :"    0.0000"
@@ -370,6 +367,7 @@ func (s *OFDMAChannel) UnmarshalJSON(b []byte) error {
 		RepPower    string `json:"repPower"`    // :"    0.0000"
 		RepPower1_6 string `json:"repPower1_6"` // :"    0.0000"
 		FFTVal      string `json:"fftVal"`      // :"        2K"
+		ID          int    `json:"uschindex"`
 	}{}
 
 	err := json.Unmarshal(b, &raw)
@@ -399,21 +397,21 @@ type CMLog struct {
 
 // LogEntry -
 type LogEntry struct {
-	ID       int
 	Time     time.Time
 	Type     string
 	Severity string // syslog-style severity string & mapping
 	Event    string
+	ID       int
 }
 
 // UnmarshalJSON - implements json.Unmarshaler
 func (s *LogEntry) UnmarshalJSON(b []byte) error {
 	raw := struct {
-		ID       int `json:"index"`
 		Time     string
 		Type     string
 		Priority string
 		Event    string
+		ID       int `json:"index"`
 	}{}
 
 	err := json.Unmarshal(b, &raw)
