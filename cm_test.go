@@ -24,7 +24,7 @@ func TestVersion(t *testing.T) {
 	}))
 
 	defer srv.Close()
-	d := &CableModem{credentials{}, mustParse(srv.URL), srv.Client()}
+	d := testCableModem(srv)
 
 	v, err := d.CMVersion(context.Background())
 	assert.NoError(t, err)
@@ -54,7 +54,7 @@ func TestCMDocsisProvision(t *testing.T) {
 	}))
 
 	defer srv.Close()
-	d := &CableModem{credentials{}, mustParse(srv.URL), srv.Client()}
+	d := testCableModem(srv)
 
 	p, err := d.CMDocsisProvision(context.Background())
 	assert.NoError(t, err)
@@ -90,7 +90,7 @@ func TestCMDsInfo(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	d := &CableModem{credentials{}, mustParse(srv.URL), srv.Client()}
+	d := testCableModem(srv)
 
 	p, err := d.CMDsInfo(context.Background())
 	assert.NoError(t, err)
@@ -132,7 +132,7 @@ func TestCMUsInfo(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	d := &CableModem{credentials{}, mustParse(srv.URL), srv.Client()}
+	d := testCableModem(srv)
 
 	p, err := d.CMUsInfo(context.Background())
 	assert.NoError(t, err)
@@ -171,7 +171,7 @@ func TestCMSysInfo(t *testing.T) {
 	}))
 
 	defer srv.Close()
-	d := &CableModem{credentials{}, mustParse(srv.URL), srv.Client()}
+	d := testCableModem(srv)
 
 	p, err := d.CMSysInfo(context.Background())
 	assert.NoError(t, err)
@@ -206,7 +206,7 @@ func TestCMDsOFDM(t *testing.T) {
 	}))
 
 	defer srv.Close()
-	d := &CableModem{credentials{}, mustParse(srv.URL), srv.Client()}
+	d := testCableModem(srv)
 
 	p, err := d.CMDsOfdm(context.Background())
 	assert.NoError(t, err)
@@ -240,7 +240,7 @@ func TestCMUsOFDM(t *testing.T) {
 	}))
 
 	defer srv.Close()
-	d := &CableModem{credentials{}, mustParse(srv.URL), srv.Client()}
+	d := testCableModem(srv)
 
 	p, err := d.CMUsOfdm(context.Background())
 	assert.NoError(t, err)
@@ -269,7 +269,7 @@ func TestCMLog(t *testing.T) {
 	}))
 
 	defer srv.Close()
-	d := &CableModem{credentials{}, mustParse(srv.URL), srv.Client()}
+	d := testCableModem(srv)
 
 	t1, err := time.Parse(time.RFC3339, "2020-11-15T03:57:38Z")
 	assert.NoError(t, err)

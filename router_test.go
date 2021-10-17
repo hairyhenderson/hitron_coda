@@ -11,6 +11,10 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func testCableModem(srv *httptest.Server) *CableModem {
+	return &CableModem{credentials: credentials{}, base: mustParse(srv.URL), hc: srv.Client()}
+}
+
 //nolint:funlen
 func TestRouterSysInfo(t *testing.T) {
 	body := `{"errCode":"000","errMsg":"",
@@ -47,7 +51,7 @@ func TestRouterSysInfo(t *testing.T) {
 	}))
 
 	defer srv.Close()
-	d := &CableModem{credentials{}, mustParse(srv.URL), srv.Client()}
+	d := testCableModem(srv)
 
 	p, err := d.RouterSysInfo(context.Background())
 	assert.NoError(t, err)
@@ -162,7 +166,7 @@ func TestRouterCapability(t *testing.T) {
 	}))
 
 	defer srv.Close()
-	d := &CableModem{credentials{}, mustParse(srv.URL), srv.Client()}
+	d := testCableModem(srv)
 
 	p, err := d.RouterCapability(context.Background())
 	assert.NoError(t, err)
@@ -184,7 +188,7 @@ func TestRouterLocation(t *testing.T) {
 	}))
 
 	defer srv.Close()
-	d := &CableModem{credentials{}, mustParse(srv.URL), srv.Client()}
+	d := testCableModem(srv)
 
 	p, err := d.RouterLocation(context.Background())
 	assert.NoError(t, err)
@@ -206,7 +210,7 @@ func TestRouterDMZ(t *testing.T) {
 	}))
 
 	defer srv.Close()
-	d := &CableModem{credentials{}, mustParse(srv.URL), srv.Client()}
+	d := testCableModem(srv)
 
 	p, err := d.RouterDMZ(context.Background())
 	assert.NoError(t, err)
@@ -231,7 +235,7 @@ func TestRouterPortForwardStatus(t *testing.T) {
 	}))
 
 	defer srv.Close()
-	d := &CableModem{credentials{}, mustParse(srv.URL), srv.Client()}
+	d := testCableModem(srv)
 
 	p, err := d.RouterPortForwardStatus(context.Background())
 	assert.NoError(t, err)
@@ -264,7 +268,7 @@ func TestRouterPortForwardall(t *testing.T) {
 	}))
 
 	defer srv.Close()
-	d := &CableModem{credentials{}, mustParse(srv.URL), srv.Client()}
+	d := testCableModem(srv)
 
 	p, err := d.RouterPortForwardall(context.Background())
 	assert.NoError(t, err)
@@ -305,7 +309,7 @@ func TestRouterPortTriggerStatus(t *testing.T) {
 	}))
 
 	defer srv.Close()
-	d := &CableModem{credentials{}, mustParse(srv.URL), srv.Client()}
+	d := testCableModem(srv)
 
 	p, err := d.RouterPortTriggerStatus(context.Background())
 	assert.NoError(t, err)
@@ -329,7 +333,7 @@ func TestRouterPortTriggerall(t *testing.T) {
 	}))
 
 	defer srv.Close()
-	d := &CableModem{credentials{}, mustParse(srv.URL), srv.Client()}
+	d := testCableModem(srv)
 
 	p, err := d.RouterPortTriggerall(context.Background())
 	assert.NoError(t, err)
@@ -359,7 +363,7 @@ func TestRouterTR069(t *testing.T) {
 	}))
 
 	defer srv.Close()
-	d := &CableModem{credentials{}, mustParse(srv.URL), srv.Client()}
+	d := testCableModem(srv)
 
 	p, err := d.RouterTR069(context.Background())
 	assert.NoError(t, err)

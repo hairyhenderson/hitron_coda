@@ -15,27 +15,26 @@ import (
 
 // RouterSysInfo -
 type RouterSysInfo struct {
-	Error
+	SystemTime time.Time  // current time
+	PrivLanNet *net.IPNet //
 	CMVersion
-
-	SystemTime      time.Time        // current time
+	Error
 	LANName         string           // :"brlan0",
+	WanName         string           // :"erouter0",
+	RouterMode      string           // :"Dualstack"
 	PrivLanIP       net.IP           // :"192.168.0.1\/24",
-	PrivLanNet      *net.IPNet       //
+	SecDNS          net.IP           // :"",
+	DNS             []net.IP         // :["127.0.0.1","2607:f2c0::2"],
+	WanIP           []net.IP         // :["23.233.27.226","2607:f2c0:f200:a03:59e0:7e1e:f96b:923b"],
+	RFMac           net.HardwareAddr // :"74:9B:DE:AD:BE:EF",
+	SystemLanUptime time.Duration    // : "468117",
+	SystemWanUptime time.Duration    // :"468083",
 	LanRx           int64            // :"19601748772",
 	LanTx           int64            // :"141585555187",
-	WanName         string           // :"erouter0",
-	WanIP           []net.IP         // :["23.233.27.226","2607:f2c0:f200:a03:59e0:7e1e:f96b:923b"],
 	WanRx           int64            // :"139788502458",
 	WanRxPkts       int64            // :"175946286",
 	WanTx           int64            // :"18787516468",
 	WanTxPkts       int64            // :"52845543",
-	DNS             []net.IP         // :["127.0.0.1","2607:f2c0::2"],
-	RFMac           net.HardwareAddr // :"74:9B:DE:AD:BE:EF",
-	SecDNS          net.IP           // :"",
-	SystemLanUptime time.Duration    // : "468117",
-	SystemWanUptime time.Duration    // :"468083",
-	RouterMode      string           // :"Dualstack"
 }
 
 //nolint:funlen
@@ -155,17 +154,17 @@ func (s *RouterSysInfo) UnmarshalJSON(b []byte) error {
 		LanRx           string   `json:"lanRx"`           // :"19601748772",
 		LanTx           string   `json:"lanTx"`           // :"141585555187",
 		WanName         string   `json:"wanName"`         // :"erouter0",
-		WanIP           []net.IP `json:"wanIP"`           // :["23.233.27.226","2607:f2c0:f200:a03:59e0:7e1e:f96b:923b"],
 		WanRx           string   `json:"wanRx"`           // :"139788502458",
 		WanRxPkts       string   `json:"wanRxPkts"`       // :"175946286",
 		WanTx           string   `json:"wanTx"`           // :"18787516468",
 		WanTxPkts       string   `json:"wanTxPkts"`       // :"52845543",
-		DNS             []net.IP `json:"dns"`             // :["127.0.0.1","2607:f2c0::2"],
 		RFMac           string   `json:"rfMac"`           // :"74:9B:DE:AD:BE:EF",
-		SecDNS          net.IP   `json:"secDNS"`          // :"",
 		SystemLanUptime string   `json:"systemLanUptime"` // : "468117",
 		SystemWanUptime string   `json:"systemWanUptime"` // :"468083",
 		RouterMode      string   `json:"routerMode"`      // :"Dualstack"
+		WanIP           []net.IP `json:"wanIP"`           // :["23.233.27.226","2607:f2c0:f200:a03:59e0:7e1e:f96b:923b"],
+		DNS             []net.IP `json:"dns"`             // :["127.0.0.1","2607:f2c0::2"],
+		SecDNS          net.IP   `json:"secDNS"`          // :"",
 	}{}
 
 	err := json.Unmarshal(b, &raw)
@@ -364,10 +363,10 @@ func (r RouterLocation) String() string {
 // RouterDMZ -
 type RouterDMZ struct {
 	Error
-	Enable     bool
 	Host       net.IP
 	PrivateLan net.IP
 	Mask       net.IP
+	Enable     bool
 }
 
 // UnmarshalJSON - implements json.Unmarshaler
@@ -399,9 +398,9 @@ func (s *RouterDMZ) UnmarshalJSON(b []byte) error {
 // RouterPortForwardStatus -
 type RouterPortForwardStatus struct {
 	Error
-	Enable     bool
 	PrivateLan net.IP
 	Mask       net.IP
+	Enable     bool
 }
 
 // UnmarshalJSON - implements json.Unmarshaler
@@ -431,21 +430,21 @@ func (s *RouterPortForwardStatus) UnmarshalJSON(b []byte) error {
 // RouterPortForwardall -
 type RouterPortForwardall struct {
 	Error
-	Total int
 	Rules []PortForwardRule `json:"Rules_List"`
+	Total int
 }
 
 // PortForwardRule -
 type PortForwardRule struct {
-	Enable       bool
-	ID           int
-	Origin       int
 	AppName      string
 	Protocol     string
+	RemoteIPs    IPRange
+	LocalIP      net.IP
 	PublicPorts  PortRange
 	PrivatePorts PortRange
-	LocalIP      net.IP
-	RemoteIPs    IPRange
+	ID           int
+	Origin       int
+	Enable       bool
 }
 
 // PortRange -
@@ -534,8 +533,8 @@ func (s *RouterPortTriggerStatus) UnmarshalJSON(b []byte) error {
 // RouterPortTriggerall -
 type RouterPortTriggerall struct {
 	Error
-	Total int
 	Rules []PortTriggerRule `json:"Rules_List"`
+	Total int
 }
 
 // PortTriggerRule -

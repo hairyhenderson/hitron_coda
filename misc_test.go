@@ -22,7 +22,7 @@ func TestTime(t *testing.T) {
 	}))
 
 	defer srv.Close()
-	d := &CableModem{credentials{}, mustParse(srv.URL), srv.Client()}
+	d := testCableModem(srv)
 
 	p, err := d.Time(context.Background())
 	assert.NoError(t, err)
@@ -52,7 +52,7 @@ func TestDNS(t *testing.T) {
 	}))
 
 	defer srv.Close()
-	d := &CableModem{credentials{}, mustParse(srv.URL), srv.Client()}
+	d := testCableModem(srv)
 
 	ctx := ContextWithDebugLogger(context.Background(), t)
 
@@ -83,7 +83,7 @@ func TestDDNS(t *testing.T) {
 	}))
 
 	defer srv.Close()
-	d := &CableModem{credentials{}, mustParse(srv.URL), srv.Client()}
+	d := testCableModem(srv)
 
 	ctx := ContextWithDebugLogger(context.Background(), t)
 
@@ -119,7 +119,7 @@ func TestHosts(t *testing.T) {
 	}))
 
 	defer srv.Close()
-	d := &CableModem{credentials{}, mustParse(srv.URL), srv.Client()}
+	d := testCableModem(srv)
 
 	ctx := ContextWithDebugLogger(context.Background(), t)
 
@@ -164,7 +164,7 @@ func TestUsersCSRF(t *testing.T) {
 
 	defer srv.Close()
 
-	d := &CableModem{credentials{}, mustParse(srv.URL), srv.Client()}
+	d := testCableModem(srv)
 	ctx := ContextWithDebugLogger(context.Background(), t)
 
 	p, err := d.UsersCSRF(ctx)

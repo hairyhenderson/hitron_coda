@@ -18,10 +18,9 @@ import (
 
 // CableModem represents the Hitron CODA Cable Modem/Router
 type CableModem struct {
-	credentials credentials
 	base        *url.URL
-
-	hc *http.Client
+	hc          *http.Client
+	credentials credentials
 }
 
 // debugTransport - logs the request and response if debug is enabled

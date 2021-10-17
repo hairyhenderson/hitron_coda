@@ -1,7 +1,8 @@
 linters-settings:
   govet:
     check-shadowing: true
-    fieldalignment: true
+    enable:
+      - fieldalignment
   golint:
     min-confidence: 0
   gocyclo:

@@ -35,11 +35,11 @@ var NoError = Error{Code: "000", Message: ""}
 // Time -
 type Time struct {
 	Error
-	Enable       bool
-	Daylight     bool
-	DaylightTime int
 	TZ           *time.Location
 	SNTPServer   string
+	DaylightTime int
+	Enable       bool
+	Daylight     bool
 }
 
 // UnmarshalJSON - implements json.Unmarshaler
@@ -71,13 +71,13 @@ func (s *Time) UnmarshalJSON(b []byte) error {
 // DNS -
 type DNS struct {
 	Error
-	AutoEnable   bool // whether to set DNS servers automatically, or manually
-	ProxyEnable  bool // enable DNS proxying to DHCP clients on the LAN
-	LanDNS1      net.IP
-	LanDNS2      net.IP
 	DomainSuffix string
 	ProxyName1   string
 	ProxyName2   string
+	LanDNS1      net.IP
+	LanDNS2      net.IP
+	AutoEnable   bool // whether to set DNS servers automatically, or manually
+	ProxyEnable  bool // enable DNS proxying to DHCP clients on the LAN
 }
 
 // UnmarshalJSON - implements json.Unmarshaler
@@ -86,11 +86,11 @@ func (s *DNS) UnmarshalJSON(b []byte) error {
 		Error
 		LanDNSOnOff   string
 		DNSProxyOnOff string
-		LanDNS1       net.IP
-		LanDNS2       net.IP
 		DomainSuffix  string
 		ProxyName1    string
 		ProxyName2    string
+		LanDNS1       net.IP
+		LanDNS2       net.IP
 	}{}
 
 	err := json.Unmarshal(b, &raw)
@@ -113,12 +113,12 @@ func (s *DNS) UnmarshalJSON(b []byte) error {
 // DDNS -
 type DDNS struct {
 	Error
-	Enable         bool
 	Provider       string
 	Username       string
 	Password       string
 	Hostname       string
 	UpdateInterval time.Duration
+	Enable         bool
 }
 
 // UnmarshalJSON - implements json.Unmarshaler
@@ -126,11 +126,11 @@ func (s *DDNS) UnmarshalJSON(b []byte) error {
 	raw := struct {
 		Error
 		DDNSOnOff          string
-		DDNSSrvProvider    int
 		DDNSUsername       string
 		DDNSPassword       string
 		DDNSHostnames      string
 		DDNSUpdateInterval string
+		DDNSSrvProvider    int
 	}{}
 
 	err := json.Unmarshal(b, &raw)
@@ -177,13 +177,13 @@ type Hosts struct {
 type Host struct {
 	Name          string
 	AddressSource string
+	ConnectType   string
+	Action        string
 	MacAddr       net.HardwareAddr
 	IP            net.IP
-	ConnectType   string
 	ConnectTo     net.HardwareAddr
 	Comnum        int
 	AppEnable     bool
-	Action        string
 }
 
 // UnmarshalJSON - implements json.Unmarshaler
@@ -192,12 +192,12 @@ func (s *Host) UnmarshalJSON(b []byte) error {
 		HostName      string
 		AddressSource string
 		MacAddr       string
-		IP            net.IP
 		ConnectType   string
 		ConnectTo     string
-		Comnum        int
 		AppEnable     string
 		Action        string
+		IP            net.IP
+		Comnum        int
 	}{}
 
 	err := json.Unmarshal(b, &raw)
