@@ -20,6 +20,37 @@ type CMVersion struct {
 	SoftwareVersion string `json:"SoftwareVersion"`
 }
 
+func (v CMVersion) String() string {
+	if v.Error != NoError && v.Error.Message != "" {
+		return v.Error.String()
+	}
+
+	sb := strings.Builder{}
+	sb.WriteString("DeviceID: ")
+	sb.WriteString(v.DeviceID)
+	sb.WriteString("\n")
+	sb.WriteString("ModelName: ")
+	sb.WriteString(v.ModelName)
+	sb.WriteString("\n")
+	sb.WriteString("VendorName: ")
+	sb.WriteString(v.VendorName)
+	sb.WriteString("\n")
+	sb.WriteString("SerialNum: ")
+	sb.WriteString(v.SerialNum)
+	sb.WriteString("\n")
+	sb.WriteString("HwVersion: ")
+	sb.WriteString(v.HwVersion)
+	sb.WriteString("\n")
+	sb.WriteString("APIVersion: ")
+	sb.WriteString(v.APIVersion)
+	sb.WriteString("\n")
+	sb.WriteString("SoftwareVersion: ")
+	sb.WriteString(v.SoftwareVersion)
+	sb.WriteString("\n")
+
+	return sb.String()
+}
+
 // CMDocsisProvision contains DOCSIS provisioning state
 // For each step:
 // - "Process" indicates the CODA-4x8x is attempting to complete a connection step.

@@ -58,6 +58,7 @@ func TestRouterSysInfo(t *testing.T) {
 	systime, err := time.ParseInLocation("2006-01-02 15:04:05", "2020-11-17 02:12:33", loc)
 	assert.NoError(t, err)
 
+	//nolint:dupl
 	assert.EqualValues(t, RouterSysInfo{
 		Error: NoError,
 		CMVersion: CMVersion{
@@ -88,6 +89,66 @@ func TestRouterSysInfo(t *testing.T) {
 		SystemLanUptime: 130*time.Hour + 1*time.Minute + 57*time.Second,
 		SystemWanUptime: 130*time.Hour + 1*time.Minute + 23*time.Second,
 	}, p)
+}
+
+func TestRouterSysInfo_String(t *testing.T) {
+	loc, err := time.LoadLocation("Etc/UTC")
+	assert.NoError(t, err)
+
+	systime, err := time.ParseInLocation("2006-01-02 15:04:05", "2020-11-17 02:12:33", loc)
+	assert.NoError(t, err)
+
+	//nolint:dupl
+	s := RouterSysInfo{
+		Error: NoError,
+		CMVersion: CMVersion{
+			DeviceID:        "74:9B:DE:AD:BE:EF",
+			ModelName:       "CODA-4680-TPIA",
+			VendorName:      "Hitron Technologies",
+			SerialNum:       "123456789012",
+			HwVersion:       "1A",
+			APIVersion:      "1.11",
+			SoftwareVersion: "7.1.1.2.2b9",
+		},
+		SystemTime: systime,
+		LANName:    "brlan0",
+		WanName:    "erouter0",
+		RouterMode: "Dualstack",
+		PrivLanIP:  net.ParseIP("192.168.0.1"),
+		PrivLanNet: &net.IPNet{IP: net.ParseIP("192.168.0.0").To4(), Mask: net.CIDRMask(24, 32)},
+
+		LanRx:           19601748772,
+		LanTx:           141585555187,
+		WanIP:           []net.IP{net.ParseIP("23.233.27.226"), net.ParseIP("2607:f2c0:f200:a03:59e0:7e1e:f96b:923b")},
+		WanRx:           139788502458,
+		WanRxPkts:       175946286,
+		WanTx:           18787516468,
+		WanTxPkts:       52845543,
+		DNS:             []net.IP{net.ParseIP("127.0.0.1"), net.ParseIP("2607:f2c0::2")},
+		RFMac:           net.HardwareAddr{0x74, 0x9b, 0xde, 0xad, 0xbe, 0xef},
+		SystemLanUptime: 130*time.Hour + 1*time.Minute + 57*time.Second,
+		SystemWanUptime: 130*time.Hour + 1*time.Minute + 23*time.Second,
+	}
+
+	assert.Equal(t, `CMVersion:
+	DeviceID: 74:9B:DE:AD:BE:EF
+	ModelName: CODA-4680-TPIA
+	VendorName: Hitron Technologies
+	SerialNum: 123456789012
+	HwVersion: 1A
+	APIVersion: 1.11
+	SoftwareVersion: 7.1.1.2.2b9
+SystemTime: 2020-11-17 02:12:33 +0000 UTC
+LAN: brlan0 (IP 192.168.0.1) (Net 192.168.0.0/24)
+	Rx/Tx: 18.3G/131.9G
+WAN: erouter0 (23.233.27.226, 2607:f2c0:f200:a03:59e0:7e1e:f96b:923b)
+	Rx/Tx: 130.2G/17.5G
+	Rx/Tx Packets: 175,946,286/52,845,543
+DNS: 127.0.0.1, 2607:f2c0::2
+RFMac: 74:9b:de:ad:be:ef
+System Uptime: LAN 130h1m57s, WAN 130h1m23s
+RouterMode: Dualstack
+`, s.String())
 }
 
 func TestRouterCapability(t *testing.T) {

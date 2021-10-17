@@ -20,6 +20,14 @@ type Error struct {
 	Message string `json:"errMsg"`
 }
 
+func (e Error) String() string {
+	if e.Code == "000" {
+		return ""
+	}
+
+	return fmt.Sprintf("Error %s: %s", e.Code, e.Message)
+}
+
 // NoError represents the successful state
 //nolint:gochecknoglobals
 var NoError = Error{Code: "000", Message: ""}
