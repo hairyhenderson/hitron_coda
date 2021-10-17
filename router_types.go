@@ -75,9 +75,12 @@ func (s *RouterSysInfo) UnmarshalJSON(b []byte) error {
 	s.DNS = raw.DNS
 	s.SecDNS = raw.SecDNS
 
-	s.RFMac, err = net.ParseMAC(raw.RFMac)
-	if err != nil {
-		return fmt.Errorf("failed to parse RF MAC Address %q: %w", raw.RFMac, err)
+	// sometimes the CM gets confused and stops returning the MAC Address...
+	if raw.RFMac != "" {
+		s.RFMac, err = net.ParseMAC(raw.RFMac)
+		if err != nil {
+			return fmt.Errorf("failed to parse RF MAC Address %q: %w", raw.RFMac, err)
+		}
 	}
 
 	s.PrivLanIP, s.PrivLanNet, err = net.ParseCIDR(raw.PrivLanIP)
