@@ -193,3 +193,33 @@ func atof64(s string) float64 {
 
 	return f
 }
+
+//nolint:gomnd
+func formattedBytesToInt64(s string) int64 {
+	i, err := strconv.ParseInt(strings.TrimSpace(s), 10, 64)
+	if err == nil {
+		return i
+	}
+
+	s = strings.TrimSuffix(s, " Bytes")
+	if len(s) <= 1 {
+		return atoi64(s)
+	}
+
+	switch s[len(s)-1] {
+	case 'B':
+		i = int64(atof64(s[:len(s)-1]))
+	case 'K':
+		i = int64(atof64(s[:len(s)-1]) * 1024)
+	case 'M':
+		i = int64(atof64(s[:len(s)-1]) * 1024 * 1024)
+	case 'G':
+		i = int64(atof64(s[:len(s)-1]) * 1024 * 1024 * 1024)
+	case 'T':
+		i = int64(atof64(s[:len(s)-1]) * 1024 * 1024 * 1024 * 1024)
+	default:
+		i = int64(atof64(s))
+	}
+
+	return i
+}

@@ -141,7 +141,7 @@ func (s RouterSysInfo) String() string {
 }
 
 // UnmarshalJSON - implements json.Unmarshaler
-//nolint:funlen
+//nolint:funlen,gocyclo
 func (s *RouterSysInfo) UnmarshalJSON(b []byte) error {
 	raw := struct {
 		Error
@@ -162,9 +162,9 @@ func (s *RouterSysInfo) UnmarshalJSON(b []byte) error {
 		SystemLanUptime string   `json:"systemLanUptime"` // : "468117",
 		SystemWanUptime string   `json:"systemWanUptime"` // :"468083",
 		RouterMode      string   `json:"routerMode"`      // :"Dualstack"
-		WanIP           []net.IP `json:"wanIP"`           // :["23.233.27.226","2607:f2c0:f200:a03:59e0:7e1e:f96b:923b"],
-		DNS             []net.IP `json:"dns"`             // :["127.0.0.1","2607:f2c0::2"],
-		SecDNS          net.IP   `json:"secDNS"`          // :"",
+		SecDNS          string   `json:"secDNS"`          // :"",
+		WanIP           []string `json:"wanIP"`           // :["23.233.27.226","2607:f2c0:f200:a03:59e0:7e1e:f96b:923b"],
+		DNS             []string `json:"dns"`             // :["127.0.0.1","2607:f2c0::2"],
 	}{}
 
 	err := json.Unmarshal(b, &raw)
@@ -178,9 +178,27 @@ func (s *RouterSysInfo) UnmarshalJSON(b []byte) error {
 	s.LANName = raw.LANName
 	s.WanName = raw.WanName
 	s.RouterMode = raw.RouterMode
-	s.WanIP = raw.WanIP
-	s.DNS = raw.DNS
-	s.SecDNS = raw.SecDNS
+
+	// secDNS can be empty, or set to a value like "none", so we ignore
+	// non-parseable IPs here
+	secDNS := net.ParseIP(raw.SecDNS)
+	if len(secDNS) > 0 {
+		s.SecDNS = secDNS
+	}
+
+	wanIP, err := parseIPList(raw.WanIP)
+	if err != nil {
+		return fmt.Errorf("failed to parse WanIP %q: %w", raw.WanIP, err)
+	}
+
+	s.WanIP = wanIP
+
+	dnsIPs, err := parseIPList(raw.DNS)
+	if err != nil {
+		return fmt.Errorf("failed to parse DNS %q: %w", raw.DNS, err)
+	}
+
+	s.DNS = dnsIPs
 
 	// sometimes the CM gets confused and stops returning the MAC Address...
 	if raw.RFMac != "" {
@@ -195,18 +213,26 @@ func (s *RouterSysInfo) UnmarshalJSON(b []byte) error {
 		return fmt.Errorf("failed to parse CIDR %q: %w", raw.PrivLanIP, err)
 	}
 
-	s.LanRx = atoi64(raw.LanRx)
-	s.LanTx = atoi64(raw.LanTx)
-	s.WanRx = atoi64(raw.WanRx)
+	s.LanRx = formattedBytesToInt64(raw.LanRx)
+	s.LanTx = formattedBytesToInt64(raw.LanTx)
+	s.WanRx = formattedBytesToInt64(raw.WanRx)
 	s.WanRxPkts = atoi64(raw.WanRxPkts)
-	s.WanTx = atoi64(raw.WanTx)
+	s.WanTx = formattedBytesToInt64(raw.WanTx)
 	s.WanTxPkts = atoi64(raw.WanTxPkts)
 
-	lanUp := atoi64(raw.SystemLanUptime)
-	s.SystemLanUptime = time.Duration(lanUp) * time.Second
+	lanUp, err := parseUptime(raw.SystemLanUptime)
+	if err != nil {
+		return fmt.Errorf("failed to parse LAN uptime %q: %w", raw.SystemLanUptime, err)
+	}
 
-	wanUp := atoi64(raw.SystemWanUptime)
-	s.SystemWanUptime = time.Duration(wanUp) * time.Second
+	s.SystemLanUptime = lanUp
+
+	wanUp, err := parseUptime(raw.SystemWanUptime)
+	if err != nil {
+		return fmt.Errorf("failed to parse WAN uptime %q: %w", raw.SystemWanUptime, err)
+	}
+
+	s.SystemWanUptime = wanUp
 
 	l, err := tzToLocation(raw.TZ)
 	if err != nil {
@@ -224,8 +250,59 @@ func (s *RouterSysInfo) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+//nolint:gomnd
+func parseUptime(s string) (time.Duration, error) {
+	i, err := strconv.ParseInt(strings.TrimSpace(s), 10, 64)
+	if err == nil {
+		return time.Duration(i) * time.Second, nil
+	}
+
+	if s == "" {
+		return time.Duration(0), nil
+	}
+
+	// a format like '000 days 01h:02m:03s' shows up on some models
+	var days, hours, minutes, seconds int64
+
+	_, err = fmt.Fscanf(strings.NewReader(s), "%d days %dh:%dm:%ds", &days, &hours, &minutes, &seconds)
+	if err != nil {
+		return time.Duration(0), fmt.Errorf("failed to parse uptime %q: %w", s, err)
+	}
+
+	result := time.Duration(days*24)*time.Hour +
+		time.Duration(hours)*time.Hour +
+		time.Duration(minutes)*time.Minute +
+		time.Duration(seconds)*time.Second
+
+	return result, nil
+}
+
+func parseIPList(s []string) ([]net.IP, error) {
+	ips := []net.IP{}
+
+	for _, ip := range s {
+		// sometimes spaces or newlines are included in the value...
+		ip = strings.TrimSpace(ip)
+
+		// just ignore empty strings
+		if ip == "" {
+			continue
+		}
+
+		ipAddr := net.ParseIP(ip)
+		if ipAddr == nil {
+			return nil, fmt.Errorf("failed to parse IP %q", ip)
+		}
+
+		ips = append(ips, ipAddr)
+	}
+
+	return ips, nil
+}
+
 func tzToLocation(tz string) (*time.Location, error) {
 	tzmap := map[string]string{
+		"0":      "Etc/UTC",
 		"0_1_0":  "Pacific/Kwajalein",
 		"1_1_0":  "Pacific/Pago_Pago",
 		"2_1_0":  "Pacific/Honolulu",
