@@ -17,6 +17,8 @@ subcommands:
 		Print cable modem capabilities
 	location
 		Print cable modem location
+	sysInfo
+		Print cable modem router system information
 `)
 	}
 
@@ -30,15 +32,9 @@ subcommands:
 	}
 
 	cmds := map[string]func(ctx context.Context) (fmt.Stringer, error){
-		"capability": func(ctx context.Context) (fmt.Stringer, error) {
-			return cm.RouterCapability(ctx)
-		},
-		"location": func(ctx context.Context) (fmt.Stringer, error) {
-			return cm.RouterLocation(ctx)
-		},
-		"sysInfo": func(ctx context.Context) (fmt.Stringer, error) {
-			return cm.RouterSysInfo(ctx)
-		},
+		"capability": func(ctx context.Context) (fmt.Stringer, error) { return cm.RouterCapability(ctx) },
+		"location":   func(ctx context.Context) (fmt.Stringer, error) { return cm.RouterLocation(ctx) },
+		"sysInfo":    func(ctx context.Context) (fmt.Stringer, error) { return cm.RouterSysInfo(ctx) },
 	}
 
 	c, ok := cmds[args[0]]

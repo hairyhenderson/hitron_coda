@@ -21,6 +21,8 @@ subcommands:
 		Print cable modem logs
 	clearLog
 		Clear cable modem logs
+	sysInfo
+		Print cable modem system information
 `)
 	}
 
@@ -34,18 +36,11 @@ subcommands:
 	}
 
 	cmds := map[string]func(ctx context.Context) (fmt.Stringer, error){
-		"version": func(ctx context.Context) (fmt.Stringer, error) {
-			return cm.CMVersion(ctx)
-		},
-		"reboot": func(ctx context.Context) (fmt.Stringer, error) {
-			return cm.CMReboot(ctx)
-		},
-		"log": func(ctx context.Context) (fmt.Stringer, error) {
-			return cm.CMLog(ctx)
-		},
-		"clearLog": func(ctx context.Context) (fmt.Stringer, error) {
-			return cm.CMClearLog(ctx)
-		},
+		"version":  func(ctx context.Context) (fmt.Stringer, error) { return cm.CMVersion(ctx) },
+		"reboot":   func(ctx context.Context) (fmt.Stringer, error) { return cm.CMReboot(ctx) },
+		"log":      func(ctx context.Context) (fmt.Stringer, error) { return cm.CMLog(ctx) },
+		"clearLog": func(ctx context.Context) (fmt.Stringer, error) { return cm.CMClearLog(ctx) },
+		"sysInfo":  func(ctx context.Context) (fmt.Stringer, error) { return cm.CMSysInfo(ctx) },
 	}
 
 	c, ok := cmds[args[0]]
@@ -59,12 +54,12 @@ subcommands:
 
 	defer func() { _ = cm.Logout(ctx) }()
 
-	if c != nil {
-		out, err := c(ctx)
-		fmt.Printf("%s", out)
-
+	out, err := c(ctx)
+	if err != nil {
 		return err
 	}
+
+	fmt.Printf("%s", out)
 
 	return nil
 }
