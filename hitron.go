@@ -100,9 +100,11 @@ type debugLogger interface {
 type debugLoggerKey struct{}
 
 // ContextWithDebugLogger - add a logger for debugging the client
-func ContextWithDebugLogger(ctx context.Context, l interface {
-	Logf(format string, args ...interface{})
-}) context.Context {
+func ContextWithDebugLogger(ctx context.Context,
+	l interface {
+		Logf(format string, args ...interface{})
+	},
+) context.Context {
 	return context.WithValue(ctx, debugLoggerKey{}, l)
 }
 
