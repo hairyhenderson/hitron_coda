@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func testCableModem(srv *httptest.Server) *CableModem {
@@ -93,6 +94,106 @@ func TestRouterSysInfo(t *testing.T) {
 		SystemLanUptime: 130*time.Hour + 1*time.Minute + 57*time.Second,
 		SystemWanUptime: 130*time.Hour + 1*time.Minute + 23*time.Second,
 	}, p)
+
+	// different body from CODA-4582 in bridge mode
+	body = `{
+		"errCode": "000",
+		"errMsg": "",
+		"deviceId": "",
+		"modelName": "CODA-4582",
+		"vendorName": "RES",
+		"SerialNum": "",
+		"HwVersion": "2A",
+		"ApiVersion": "1.12.1",
+		"SoftwareVersion": "7.1.1.2.8b4",
+		"deploymentName": "",
+		"VendorLogo": "0",
+		"sysTime": "2022-07-29 23:26:32",
+		"tz": "0",
+		"lanName": null,
+		"privLanIP": "192.168.0.1\/24",
+		"lanRx": "1.05G Bytes",
+		"lanTx": "18.15G Bytes",
+		"wanName": null,
+		"wanIP": [ "0.0.0.0\n", "" ],
+		"wanRx": "18.23G Bytes",
+		"wanRxPkts": null,
+		"wanTx": "989.1M Bytes",
+		"wanTxPkts": null,
+		"dns": [ "", "" ],
+		"rfMac": "",
+		"secDNS": "none",
+		"systemLanUptime": "000 days 04h:43m:05s",
+		"systemWanUptime": "000 days 00h:00m:00s",
+		"routerMode": "Bridge",
+		"lanAsWanMode": "0",
+		"privLanIp": "192.168.0.1\/24"
+	}`
+
+	d = testCableModem(srv)
+
+	p, err = d.RouterSysInfo(context.Background())
+	require.NoError(t, err)
+
+	systime, err = time.ParseInLocation("2006-01-02 15:04:05", "2022-07-29 23:26:32", loc)
+	assert.NoError(t, err)
+
+	assert.EqualValues(t, RouterSysInfo{
+		Error: NoError,
+		CMVersion: CMVersion{
+			ModelName:       "CODA-4582",
+			VendorName:      "RES",
+			HwVersion:       "2A",
+			APIVersion:      "1.12.1",
+			SoftwareVersion: "7.1.1.2.8b4",
+		},
+		SystemTime: systime,
+		RouterMode: "Bridge",
+		PrivLanIP:  net.ParseIP("192.168.0.1"),
+		PrivLanNet: &net.IPNet{IP: net.ParseIP("192.168.0.0").To4(), Mask: net.CIDRMask(24, 32)},
+
+		LanRx:           1127428915,
+		LanTx:           19488414105,
+		WanIP:           []net.IP{net.ParseIP("0.0.0.0")},
+		WanRx:           19574313451,
+		WanTx:           1037146521,
+		DNS:             []net.IP{},
+		SystemLanUptime: 4*time.Hour + 43*time.Minute + 5*time.Second,
+	}, p)
+}
+
+func TestParseUptime(t *testing.T) {
+	d, err := parseUptime("")
+	assert.NoError(t, err)
+	assert.Equal(t, time.Duration(0), d)
+
+	d, err = parseUptime("468117")
+	assert.NoError(t, err)
+	assert.Equal(t, time.Duration(468117)*time.Second, d)
+
+	d, err = parseUptime("000 days 00h:00m:00s")
+	assert.NoError(t, err)
+	assert.Equal(t, time.Duration(0), d)
+
+	d, err = parseUptime("000 days 04h:43m:05s")
+	assert.NoError(t, err)
+	assert.Equal(t, 4*time.Hour+43*time.Minute+5*time.Second, d)
+
+	d, err = parseUptime("015 days 22h:13m:57s")
+	assert.NoError(t, err)
+	assert.Equal(t,
+		(15*24*time.Hour)+
+			22*time.Hour+
+			13*time.Minute+
+			57*time.Second, d)
+
+	d, err = parseUptime("400 days 22h:13m:57s")
+	assert.NoError(t, err)
+	assert.Equal(t,
+		(400*24*time.Hour)+
+			22*time.Hour+
+			13*time.Minute+
+			57*time.Second, d)
 }
 
 func TestRouterSysInfo_String(t *testing.T) {

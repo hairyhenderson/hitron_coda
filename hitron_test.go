@@ -56,3 +56,21 @@ func TestURL(t *testing.T) {
 	u = d.url("http://foo.example.com/blah")
 	assert.EqualValues(t, expected, u)
 }
+
+func TestFormattedBytesToInt64(t *testing.T) {
+	assert.Equal(t, int64(0), formattedBytesToInt64(""))
+	assert.Equal(t, int64(0), formattedBytesToInt64("0"))
+	assert.Equal(t, int64(0), formattedBytesToInt64("0 Bytes"))
+	assert.Equal(t, int64(0), formattedBytesToInt64("0M Bytes"))
+	assert.Equal(t, int64(0), formattedBytesToInt64("0.0G Bytes"))
+
+	assert.Equal(t, int64(1), formattedBytesToInt64("1"))
+	assert.Equal(t, int64(1), formattedBytesToInt64("1B"))
+	assert.Equal(t, int64(1), formattedBytesToInt64("1B Bytes"))
+	assert.Equal(t, int64(42), formattedBytesToInt64("42 Bytes"))
+	assert.Equal(t, int64(1024), formattedBytesToInt64("1.0K Bytes"))
+	assert.Equal(t, int64(2*1024*1024), formattedBytesToInt64("2.0M Bytes"))
+
+	// 18.65 * 1TiB == 20505891858022.4, truncated to 20505891858022
+	assert.Equal(t, int64(20505891858022), formattedBytesToInt64("18.65T Bytes"))
+}
