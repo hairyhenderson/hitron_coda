@@ -6,6 +6,9 @@ import (
 	"net"
 	"strings"
 	"time"
+
+	"golang.org/x/text/language"
+	"golang.org/x/text/message"
 )
 
 // CMVersion contains version information for the cable modem
@@ -185,6 +188,43 @@ type CMSysInfo struct {
 	Lease         time.Duration    // WAN DHCP "D: 6 H: 11 M: 10 S: 20"
 	DsDataRate    int64            // WAN downstream data rate (bits/sec)
 	UsDataRate    int64            // WAN upstream data rate (bits/sec)
+}
+
+func (s CMSysInfo) String() string {
+	if s.Error != NoError && s.Error.Message != "" {
+		return s.Error.String()
+	}
+
+	sb := strings.Builder{}
+	sb.WriteString("MAC: ")
+	sb.WriteString(s.MacAddr.String())
+	sb.WriteString("\n")
+	sb.WriteString("NetworkAccess: ")
+	sb.WriteString(s.NetworkAccess)
+	sb.WriteString("\n")
+	sb.WriteString("Configname: ")
+	sb.WriteString(s.Configname)
+	sb.WriteString("\n")
+	sb.WriteString("IP: ")
+	sb.WriteString(s.IP.String())
+	sb.WriteString("\n")
+	sb.WriteString("SubMask: ")
+	sb.WriteString(s.SubMask.String())
+	sb.WriteString("\n")
+	sb.WriteString("GW: ")
+	sb.WriteString(s.GW.String())
+	sb.WriteString("\n")
+	sb.WriteString("Lease: ")
+	sb.WriteString(s.Lease.String())
+	sb.WriteString("\n")
+
+	p := message.NewPrinter(language.English)
+
+	sb.WriteString("Data Rate (down/up bits/s): ")
+	sb.WriteString(p.Sprintf("%dbps/%dbps", s.DsDataRate, s.UsDataRate))
+	sb.WriteString("\n")
+
+	return sb.String()
 }
 
 // UnmarshalJSON - implements json.Unmarshaler
