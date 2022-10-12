@@ -141,6 +141,7 @@ func (s RouterSysInfo) String() string {
 }
 
 // UnmarshalJSON - implements json.Unmarshaler
+//
 //nolint:funlen,gocyclo
 func (s *RouterSysInfo) UnmarshalJSON(b []byte) error {
 	raw := struct {

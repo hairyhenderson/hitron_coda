@@ -261,6 +261,7 @@ type WiFiRadioAdvanced struct {
 }
 
 // UnmarshalJSON - implements json.Unmarshaler
+//
 //nolint:funlen
 func (s *WiFiRadioAdvanced) UnmarshalJSON(b []byte) error {
 	raw := struct {

@@ -176,6 +176,7 @@ func (p *PortInfo) UnmarshalJSON(b []byte) error {
 }
 
 // CMSysInfo -
+//
 //nolint:lll
 type CMSysInfo struct {
 	Error
@@ -335,6 +336,7 @@ type CMDsOfdm struct {
 }
 
 // OFDMReceiver - OFDM Downstream Receiver information
+//
 //nolint:lll
 type OFDMReceiver struct {
 	FFTType        string  // Type of FFT in use (NA/4K/etc...)
@@ -385,6 +387,7 @@ type CMUsOfdm struct {
 }
 
 // OFDMAChannel - OFDM/OFDMA Channel
+//
 //nolint:lll
 type OFDMAChannel struct {
 	FFTSize     string  // the type of Fast Fourier Transform in use on the relevant channel.

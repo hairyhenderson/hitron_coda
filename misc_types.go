@@ -29,6 +29,7 @@ func (e Error) String() string {
 }
 
 // NoError represents the successful state
+//
 //nolint:gochecknoglobals
 var NoError = Error{Code: "000", Message: ""}
 
