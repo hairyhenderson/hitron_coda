@@ -6,7 +6,7 @@ require (
 	code.cloudfoundry.org/bytefmt v0.0.0-20211005130812-5bb3c17173e5
 	github.com/go-kit/log v0.2.1
 	github.com/stretchr/testify v1.7.0
-	golang.org/x/text v0.3.7
+	golang.org/x/text v0.3.8
 )
 
 require (
