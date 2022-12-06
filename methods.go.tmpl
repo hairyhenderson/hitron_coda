@@ -5,7 +5,6 @@ package hitron
 import (
 	"context"
 )
-
 {{ range $path := .paths }}
 {{- $methodname := $path | strings.ReplaceAll "/" "" }}
 // {{ $methodname }} - {{ $path }}
@@ -14,4 +13,4 @@ func (c *CableModem) {{ $methodname }}(ctx context.Context) (out {{ $methodname 
 
 	return out, err
 }
-{{ end }}
+{{ end -}}
