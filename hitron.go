@@ -180,14 +180,12 @@ func (c *CableModem) sendRequest(ctx context.Context, method, path string, body,
 }
 
 func atoi64(s string) int64 {
-	//nolint:gomnd
 	i, _ := strconv.ParseInt(strings.TrimSpace(s), 10, 64)
 
 	return i
 }
 
 func atof64(s string) float64 {
-	//nolint:gomnd
 	f, _ := strconv.ParseFloat(strings.TrimSpace(s), 64)
 
 	return f

@@ -6,7 +6,6 @@ import (
 	"context"
 )
 
-
 // CMDocsisProvision - /CM/DocsisProvision
 func (c *CableModem) CMDocsisProvision(ctx context.Context) (out CMDocsisProvision, err error) {
 	err = c.getJSON(ctx, "/CM/DocsisProvision", &out)
@@ -223,4 +222,3 @@ func (c *CableModem) WiFiWPS(ctx context.Context) (out WiFiWPS, err error) {
 
 	return out, err
 }
-
