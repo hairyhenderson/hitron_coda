@@ -8,7 +8,6 @@ import (
 	"strings"
 	"time"
 
-	"code.cloudfoundry.org/bytefmt"
 	"golang.org/x/text/language"
 	"golang.org/x/text/message"
 )
@@ -73,9 +72,9 @@ func (s RouterSysInfo) String() string {
 	sb.WriteString(")\n")
 
 	sb.WriteString("	Rx/Tx: ")
-	sb.WriteString(bytefmt.ByteSize(uint64(s.LanRx)))
+	sb.WriteString(byteSize(uint64(s.LanRx)))
 	sb.WriteString("/")
-	sb.WriteString(bytefmt.ByteSize(uint64(s.LanTx)))
+	sb.WriteString(byteSize(uint64(s.LanTx)))
 	sb.WriteString("\n")
 
 	sb.WriteString("WAN: ")
@@ -93,9 +92,9 @@ func (s RouterSysInfo) String() string {
 	sb.WriteString(")\n")
 
 	sb.WriteString("	Rx/Tx: ")
-	sb.WriteString(bytefmt.ByteSize(uint64(s.WanRx)))
+	sb.WriteString(byteSize(uint64(s.WanRx)))
 	sb.WriteString("/")
-	sb.WriteString(bytefmt.ByteSize(uint64(s.WanTx)))
+	sb.WriteString(byteSize(uint64(s.WanTx)))
 	sb.WriteString("\n")
 
 	sb.WriteString("	Rx/Tx Packets: ")
