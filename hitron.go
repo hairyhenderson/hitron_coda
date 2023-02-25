@@ -192,6 +192,16 @@ func atof64(s string) float64 {
 }
 
 //nolint:gomnd
+const (
+	_byte = 1 << (10 * iota)
+	kib
+	mib
+	gib
+	tib
+	pib
+	eib
+)
+
 func formattedBytesToInt64(s string) int64 {
 	i, err := strconv.ParseInt(strings.TrimSpace(s), 10, 64)
 	if err == nil {
@@ -207,16 +217,55 @@ func formattedBytesToInt64(s string) int64 {
 	case 'B':
 		i = int64(atof64(s[:len(s)-1]))
 	case 'K':
-		i = int64(atof64(s[:len(s)-1]) * 1024)
+		i = int64(atof64(s[:len(s)-1]) * kib)
 	case 'M':
-		i = int64(atof64(s[:len(s)-1]) * 1024 * 1024)
+		i = int64(atof64(s[:len(s)-1]) * mib)
 	case 'G':
-		i = int64(atof64(s[:len(s)-1]) * 1024 * 1024 * 1024)
+		i = int64(atof64(s[:len(s)-1]) * gib)
 	case 'T':
-		i = int64(atof64(s[:len(s)-1]) * 1024 * 1024 * 1024 * 1024)
+		i = int64(atof64(s[:len(s)-1]) * tib)
+	case 'P':
+		i = int64(atof64(s[:len(s)-1]) * pib)
+	case 'E':
+		i = int64(atof64(s[:len(s)-1]) * eib)
 	default:
 		i = int64(atof64(s))
 	}
 
 	return i
+}
+
+func byteSize(bytes uint64) string {
+	unit := ""
+	value := float64(bytes)
+
+	switch {
+	case bytes >= eib:
+		unit = "E"
+		value /= eib
+	case bytes >= pib:
+		unit = "P"
+		value /= pib
+	case bytes >= tib:
+		unit = "T"
+		value /= tib
+	case bytes >= gib:
+		unit = "G"
+		value /= gib
+	case bytes >= mib:
+		unit = "M"
+		value /= mib
+	case bytes >= kib:
+		unit = "K"
+		value /= kib
+	case bytes >= _byte:
+		unit = "B"
+	case bytes == 0:
+		return "0B"
+	}
+
+	result := strconv.FormatFloat(value, 'f', 1, 64)
+	result = strings.TrimSuffix(result, ".0")
+
+	return result + unit
 }

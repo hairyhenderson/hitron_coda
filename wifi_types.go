@@ -635,8 +635,7 @@ func (s *WiFiClientEntry) UnmarshalJSON(b []byte) error {
 	if strings.HasSuffix(raw.DataRate, "M") {
 		s.DataRate = atoi64(raw.DataRate[0 : len(raw.DataRate)-1])
 		// track as bits per second (value was in mebibits/sec)
-		//nolint:gomnd
-		s.DataRate *= 1024 * 1024
+		s.DataRate *= mib
 	}
 
 	return nil
