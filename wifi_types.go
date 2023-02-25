@@ -591,17 +591,17 @@ type WiFiClientEntry struct {
 // UnmarshalJSON - implements json.Unmarshaler
 func (s *WiFiClientEntry) UnmarshalJSON(b []byte) error {
 	raw := struct {
-		AID       string `json:"aid"`
-		DataRate  string `json:"br"`
-		Band      string `json:"band"`
-		SSID      string `json:"ssid"`
-		Hostname  string `json:"hostname"`
-		MACAddr   string `json:"mac"`
-		RSSI      string `json:"rssi"`
-		PhyMode   string `json:"pm"`
-		Channel   string `json:"ch"`
-		Bandwidth string `json:"bw"`
-		Index     int    `json:"index"`
+		DataRate  string          `json:"br"`
+		Band      string          `json:"band"`
+		SSID      string          `json:"ssid"`
+		Hostname  string          `json:"hostname"`
+		MACAddr   string          `json:"mac"`
+		RSSI      string          `json:"rssi"`
+		PhyMode   string          `json:"pm"`
+		Channel   string          `json:"ch"`
+		Bandwidth string          `json:"bw"`
+		AID       json.RawMessage `json:"aid"`
+		Index     int             `json:"index"`
 	}{}
 
 	err := json.Unmarshal(b, &raw)
@@ -609,7 +609,15 @@ func (s *WiFiClientEntry) UnmarshalJSON(b []byte) error {
 		return fmt.Errorf("failed to unmarshal WiFiClientEntry %q: %w", string(b), err)
 	}
 
-	s.AID, _ = strconv.Atoi(raw.AID)
+	if len(raw.AID) > 0 {
+		// 'aid' may be a string or an integer - unwrap first if it's a string
+		if raw.AID[0] == '"' {
+			raw.AID = raw.AID[1 : len(raw.AID)-1]
+		}
+
+		_ = json.Unmarshal(raw.AID, &s.AID)
+	}
+
 	s.Index = raw.Index
 	s.Band = raw.Band
 	s.SSID = raw.SSID
