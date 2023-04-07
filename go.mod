@@ -5,7 +5,7 @@ go 1.19
 require (
 	github.com/go-kit/log v0.2.1
 	github.com/stretchr/testify v1.8.2
-	golang.org/x/text v0.8.0
+	golang.org/x/text v0.9.0
 )
 
 require (
