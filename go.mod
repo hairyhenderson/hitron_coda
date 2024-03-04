@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/go-kit/log v0.2.1
-	github.com/stretchr/testify v1.8.4
+	github.com/stretchr/testify v1.9.0
 	golang.org/x/text v0.14.0
 )
 
