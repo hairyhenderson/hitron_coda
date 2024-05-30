@@ -3,8 +3,6 @@ package hitron
 import (
 	"context"
 	"net"
-	"net/http"
-	"net/http/httptest"
 	"testing"
 	"time"
 
@@ -17,11 +15,7 @@ func TestTime(t *testing.T) {
 		"daylightOnOff":"ON","daylightTime":"0"
 	}`
 
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(body))
-	}))
-
-	defer srv.Close()
+	srv := staticResponseServer(t, body)
 	d := testCableModem(srv)
 
 	p, err := d.Time(context.Background())
@@ -47,11 +41,7 @@ func TestDNS(t *testing.T) {
 		"proxyName1":"foo","proxyName2":"bar"
 	}`
 
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(body))
-	}))
-
-	defer srv.Close()
+	srv := staticResponseServer(t, body)
 	d := testCableModem(srv)
 
 	ctx := ContextWithDebugLogger(context.Background(), t)
@@ -78,11 +68,7 @@ func TestDDNS(t *testing.T) {
 		"ddnsHostnames":"foo.example.com","ddnsUpdateInterval":"604800"
 	}`
 
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(body))
-	}))
-
-	defer srv.Close()
+	srv := staticResponseServer(t, body)
 	d := testCableModem(srv)
 
 	ctx := ContextWithDebugLogger(context.Background(), t)
@@ -114,11 +100,7 @@ func TestHosts(t *testing.T) {
 			"comnum":1,"appEnable":"TRUE","action":"Resume"}
 		]}`
 
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(body))
-	}))
-
-	defer srv.Close()
+	srv := staticResponseServer(t, body)
 	d := testCableModem(srv)
 
 	ctx := ContextWithDebugLogger(context.Background(), t)
@@ -158,11 +140,7 @@ func TestHosts(t *testing.T) {
 func TestUsersCSRF(t *testing.T) {
 	body := `{"errCode":"000","errMsg":"","CSRF":"abcdefgh1234.4321abcdefgh"}`
 
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(body))
-	}))
-
-	defer srv.Close()
+	srv := staticResponseServer(t, body)
 
 	d := testCableModem(srv)
 	ctx := ContextWithDebugLogger(context.Background(), t)

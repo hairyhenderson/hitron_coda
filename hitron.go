@@ -60,7 +60,7 @@ func New(host, username, password string) (*CableModem, error) {
 	client := &http.Client{
 		Jar: jar,
 		// Ignore redirects
-		CheckRedirect: func(req *http.Request, via []*http.Request) error {
+		CheckRedirect: func(_ *http.Request, _ []*http.Request) error {
 			return http.ErrUseLastResponse
 		},
 		Transport: &debugTransport{http.DefaultTransport},
@@ -121,7 +121,7 @@ func debugLoggerFromContext(ctx context.Context) debugLogger {
 		}
 	}
 
-	return debugLoggerFunc(func(f string, args ...interface{}) {})
+	return debugLoggerFunc(func(_ string, _ ...interface{}) {})
 }
 
 func (c *CableModem) getJSON(ctx context.Context, path string, o interface{}) error {

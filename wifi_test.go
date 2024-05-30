@@ -3,8 +3,6 @@ package hitron
 import (
 	"context"
 	"net"
-	"net/http"
-	"net/http/httptest"
 	"testing"
 	"time"
 
@@ -17,11 +15,7 @@ func TestWiFiAccessControl(t *testing.T) {
 		"Rules_List":[{"id":0,"hostName":"foo","macAddr":"AA:BB:CC:DD:EE:FF"}]
 	}`
 
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(body))
-	}))
-
-	defer srv.Close()
+	srv := staticResponseServer(t, body)
 	d := testCableModem(srv)
 
 	ctx := ContextWithDebugLogger(context.Background(), t)
@@ -41,11 +35,7 @@ func TestWiFiAccessControl(t *testing.T) {
 func TestWiFiAccessControlStatus(t *testing.T) {
 	body := `{"errCode":"000","errMsg":"", "blockType":"Allow Listed"}`
 
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(body))
-	}))
-
-	defer srv.Close()
+	srv := staticResponseServer(t, body)
 	d := testCableModem(srv)
 
 	ctx := ContextWithDebugLogger(context.Background(), t)
@@ -66,11 +56,7 @@ func TestWiFiGuestSSID(t *testing.T) {
 		"adminGuestAccProvider":"10"
 	}`
 
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(body))
-	}))
-
-	defer srv.Close()
+	srv := staticResponseServer(t, body)
 	d := testCableModem(srv)
 
 	ctx := ContextWithDebugLogger(context.Background(), t)
@@ -105,11 +91,7 @@ func TestWiFiRadios(t *testing.T) {
 			"Radio_URI":"\/1\/Device\/WiFi\/Radios\/2","ssid_list":null}
 		]}`
 
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(body))
-	}))
-
-	defer srv.Close()
+	srv := staticResponseServer(t, body)
 	d := testCableModem(srv)
 
 	ctx := ContextWithDebugLogger(context.Background(), t)
@@ -156,11 +138,7 @@ func TestWiFiRadioDetails(t *testing.T) {
 		"igmpSnoop":"ON","Radio_URI":"\/1\/Device\/WiFi\/Radios\/2",
 		"ssid_list":""}`
 
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(body))
-	}))
-
-	defer srv.Close()
+	srv := staticResponseServer(t, body)
 	d := testCableModem(srv)
 
 	ctx := ContextWithDebugLogger(context.Background(), t)
@@ -211,11 +189,7 @@ func TestWiFiRadiosAdvanced(t *testing.T) {
 			"showMSO":"false"}
 	]}`
 
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(body))
-	}))
-
-	defer srv.Close()
+	srv := staticResponseServer(t, body)
 	d := testCableModem(srv)
 
 	ctx := ContextWithDebugLogger(context.Background(), t)
@@ -301,11 +275,7 @@ func TestWiFiRadiosSurvey(t *testing.T) {
 			"wps":"NO"}
 	]}`
 
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(body))
-	}))
-
-	defer srv.Close()
+	srv := staticResponseServer(t, body)
 	d := testCableModem(srv)
 
 	ctx := ContextWithDebugLogger(context.Background(), t)
@@ -355,11 +325,7 @@ func TestWiFiSSIDs(t *testing.T) {
 		"Guests_List":[{"enable":"OFF","ifName":"ath6","relate":"ath0"}]
 	}`
 
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(body))
-	}))
-
-	defer srv.Close()
+	srv := staticResponseServer(t, body)
 	d := testCableModem(srv)
 
 	ctx := ContextWithDebugLogger(context.Background(), t)
@@ -401,11 +367,7 @@ func TestWiFiWPS(t *testing.T) {
 		"wlsWpsStatus":"In Progress","wlsWpsTimeElapsed":"42"
 	}`
 
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(body))
-	}))
-
-	defer srv.Close()
+	srv := staticResponseServer(t, body)
 	d := testCableModem(srv)
 
 	ctx := ContextWithDebugLogger(context.Background(), t)
@@ -435,11 +397,7 @@ func TestWiFiClient(t *testing.T) {
 			"pm":"IEEE80211_MODE_11AC_VHT80","ch":"40","bw":"80MHz"}
 		]}`
 
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(body))
-	}))
-
-	defer srv.Close()
+	srv := staticResponseServer(t, body)
 	d := testCableModem(srv)
 
 	ctx := ContextWithDebugLogger(context.Background(), t)

@@ -4,8 +4,6 @@ import (
 	"context"
 	"fmt"
 	"net"
-	"net/http"
-	"net/http/httptest"
 	"testing"
 	"time"
 
@@ -19,11 +17,7 @@ func TestVersion(t *testing.T) {
 		"HwVersion":"1A","ApiVersion":"1.11","SoftwareVersion":"7.1.1.2.2b9"
 	}`
 
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(body))
-	}))
-
-	defer srv.Close()
+	srv := staticResponseServer(t, body)
 	d := testCableModem(srv)
 
 	v, err := d.CMVersion(context.Background())
@@ -49,11 +43,7 @@ func TestCMDocsisProvision(t *testing.T) {
 		"networkAccess":"Permitted","trafficStatus":"Enable"
 	}`
 
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(body))
-	}))
-
-	defer srv.Close()
+	srv := staticResponseServer(t, body)
 	d := testCableModem(srv)
 
 	p, err := d.CMDocsisProvision(context.Background())
@@ -85,9 +75,7 @@ func TestCMDsInfo(t *testing.T) {
 		{"signalStrength":false,"snr":true}
 	]}`
 
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(body))
-	}))
+	srv := staticResponseServer(t, body)
 	defer srv.Close()
 
 	d := testCableModem(srv)
@@ -127,9 +115,7 @@ func TestCMUsInfo(t *testing.T) {
 		{"portId":"8","frequency":"0","modulationType":"QAM_NONE",
 		"signalStrength":"-","bandwidth":"1600000","channelId":"0"}]}`
 
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(body))
-	}))
+	srv := staticResponseServer(t, body)
 	defer srv.Close()
 
 	d := testCableModem(srv)
@@ -166,11 +152,7 @@ func TestCMSysInfo(t *testing.T) {
 	"lease":"D: 6 H: 09 M: 25 S: 55","Configname":"bac110000106749be82df7e0",
 	"DsDataRate":"1040000000","UsDataRate":"31200000","macAddr":"74:9b:DE:AD:BE:EF"}`
 
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(body))
-	}))
-
-	defer srv.Close()
+	srv := staticResponseServer(t, body)
 	d := testCableModem(srv)
 
 	p, err := d.CMSysInfo(context.Background())
@@ -201,11 +183,7 @@ func TestCMDsOFDM(t *testing.T) {
 		"plclock":"YES","ncplock":"YES","mdc1lock":"YES","plcpower":"  0.799999"}
 		]}`
 
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(body))
-	}))
-
-	defer srv.Close()
+	srv := staticResponseServer(t, body)
 	d := testCableModem(srv)
 
 	p, err := d.CMDsOfdm(context.Background())
@@ -235,11 +213,7 @@ func TestCMUsOFDM(t *testing.T) {
 		"repPower":"    0.0000","repPower1_6":"    0.0000",
 		"fftVal":"        2K"}]}`
 
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(body))
-	}))
-
-	defer srv.Close()
+	srv := staticResponseServer(t, body)
 	d := testCableModem(srv)
 
 	p, err := d.CMUsOfdm(context.Background())
@@ -264,11 +238,7 @@ func TestCMLog(t *testing.T) {
 		"event":"%s"}
 	]}`, msg1, msg2)
 
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(body))
-	}))
-
-	defer srv.Close()
+	srv := staticResponseServer(t, body)
 	d := testCableModem(srv)
 
 	t1, err := time.Parse(time.RFC3339, "2020-11-15T03:57:38Z")
