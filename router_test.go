@@ -3,7 +3,6 @@ package hitron
 import (
 	"context"
 	"net"
-	"net/http"
 	"net/http/httptest"
 	"testing"
 	"time"
@@ -47,11 +46,7 @@ func TestRouterSysInfo(t *testing.T) {
 		"routerMode":"Dualstack"
 		}`
 
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(body))
-	}))
-
-	defer srv.Close()
+	srv := staticResponseServer(t, body)
 	d := testCableModem(srv)
 
 	p, err := d.RouterSysInfo(context.Background())
@@ -129,6 +124,7 @@ func TestRouterSysInfo(t *testing.T) {
 		"lanAsWanMode": "0",
 		"privLanIp": "192.168.0.1\/24"
 	}`
+	srv = staticResponseServer(t, body)
 
 	d = testCableModem(srv)
 
@@ -262,11 +258,7 @@ func TestRouterCapability(t *testing.T) {
 		"HnapOnOff":"OFF","UsbOnOff":"OFF","sipAlgOnOff":"OFF"
 	}`
 
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(body))
-	}))
-
-	defer srv.Close()
+	srv := staticResponseServer(t, body)
 	d := testCableModem(srv)
 
 	p, err := d.RouterCapability(context.Background())
@@ -284,11 +276,7 @@ func TestRouterCapability(t *testing.T) {
 func TestRouterLocation(t *testing.T) {
 	body := `{"errCode":"000","errMsg":"","locationText":"Basement"}`
 
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(body))
-	}))
-
-	defer srv.Close()
+	srv := staticResponseServer(t, body)
 	d := testCableModem(srv)
 
 	p, err := d.RouterLocation(context.Background())
@@ -306,11 +294,7 @@ func TestRouterDMZ(t *testing.T) {
 		"privateLan":"192.168.0.1","subMask":"255.255.255.0"
 	}`
 
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(body))
-	}))
-
-	defer srv.Close()
+	srv := staticResponseServer(t, body)
 	d := testCableModem(srv)
 
 	p, err := d.RouterDMZ(context.Background())
@@ -331,11 +315,7 @@ func TestRouterPortForwardStatus(t *testing.T) {
 		"privateLan":"192.168.0.1","subMask":"255.255.255.0"
 	}`
 
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(body))
-	}))
-
-	defer srv.Close()
+	srv := staticResponseServer(t, body)
 	d := testCableModem(srv)
 
 	p, err := d.RouterPortForwardStatus(context.Background())
@@ -364,11 +344,7 @@ func TestRouterPortForwardall(t *testing.T) {
 			"ruleOnOff":"OFF","origin":"1","id":"2"}
 		]}`
 
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(body))
-	}))
-
-	defer srv.Close()
+	srv := staticResponseServer(t, body)
 	d := testCableModem(srv)
 
 	p, err := d.RouterPortForwardall(context.Background())
@@ -405,11 +381,7 @@ func TestRouterPortTriggerStatus(t *testing.T) {
 		"allRulesOnOff":"ON"
 	}`
 
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(body))
-	}))
-
-	defer srv.Close()
+	srv := staticResponseServer(t, body)
 	d := testCableModem(srv)
 
 	p, err := d.RouterPortTriggerStatus(context.Background())
@@ -429,11 +401,7 @@ func TestRouterPortTriggerall(t *testing.T) {
 			"timeout":"50","twowayOnOff":"ON","id":"1"}
 		]}`
 
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(body))
-	}))
-
-	defer srv.Close()
+	srv := staticResponseServer(t, body)
 	d := testCableModem(srv)
 
 	p, err := d.RouterPortTriggerall(context.Background())
@@ -459,11 +427,7 @@ func TestRouterPortTriggerall(t *testing.T) {
 func TestRouterTR069(t *testing.T) {
 	body := `{"errCode":"000","errMsg":"","tr069url":"http://example.com"}`
 
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(body))
-	}))
-
-	defer srv.Close()
+	srv := staticResponseServer(t, body)
 	d := testCableModem(srv)
 
 	p, err := d.RouterTR069(context.Background())

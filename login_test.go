@@ -108,6 +108,7 @@ func TestLogout(t *testing.T) {
 			w.Header().Set("Set-Cookie", cookie.String())
 			w.WriteHeader(http.StatusOK)
 		}
+
 		n++
 	}))
 

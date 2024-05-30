@@ -12,11 +12,7 @@ import (
 func TestCMReboot(t *testing.T) {
 	body := `{"errCode":"000","errMsg":""}`
 
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte(body))
-	}))
-
-	defer srv.Close()
+	srv := staticResponseServer(t, body)
 
 	d := testCableModem(srv)
 	ctx := ContextWithDebugLogger(context.Background(), t)
@@ -24,4 +20,15 @@ func TestCMReboot(t *testing.T) {
 	o, err := d.CMReboot(ctx)
 	assert.NoError(t, err)
 	assert.EqualValues(t, &Error{Code: "000"}, o)
+}
+
+func staticResponseServer(t *testing.T, body string) *httptest.Server {
+	t.Helper()
+
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		_, _ = w.Write([]byte(body))
+	}))
+	t.Cleanup(srv.Close)
+
+	return srv
 }
