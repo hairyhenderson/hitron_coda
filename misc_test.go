@@ -44,7 +44,7 @@ func TestDNS(t *testing.T) {
 	srv := staticResponseServer(t, body)
 	d := testCableModem(srv)
 
-	ctx := ContextWithDebugLogger(context.Background(), t)
+	ctx := context.Background()
 
 	p, err := d.DNS(ctx)
 	assert.NoError(t, err)
@@ -71,7 +71,7 @@ func TestDDNS(t *testing.T) {
 	srv := staticResponseServer(t, body)
 	d := testCableModem(srv)
 
-	ctx := ContextWithDebugLogger(context.Background(), t)
+	ctx := context.Background()
 
 	p, err := d.DDNS(ctx)
 	assert.NoError(t, err)
@@ -103,7 +103,7 @@ func TestHosts(t *testing.T) {
 	srv := staticResponseServer(t, body)
 	d := testCableModem(srv)
 
-	ctx := ContextWithDebugLogger(context.Background(), t)
+	ctx := context.Background()
 
 	p, err := d.Hosts(ctx)
 	assert.NoError(t, err)
@@ -143,7 +143,7 @@ func TestUsersCSRF(t *testing.T) {
 	srv := staticResponseServer(t, body)
 
 	d := testCableModem(srv)
-	ctx := ContextWithDebugLogger(context.Background(), t)
+	ctx := context.Background()
 
 	p, err := d.UsersCSRF(ctx)
 	assert.NoError(t, err)

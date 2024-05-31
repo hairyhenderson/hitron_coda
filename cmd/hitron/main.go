@@ -8,24 +8,14 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/go-kit/log"
-	"github.com/go-kit/log/level"
 	hitron "github.com/hairyhenderson/hitron_coda"
 )
-
-type debugLogAdapter struct {
-	log.Logger
-}
-
-func (l debugLogAdapter) Logf(format string, args ...interface{}) {
-	_ = l.Log("msg", fmt.Sprintf(format, args...))
-}
 
 type opts struct {
 	host     string
 	username string
 	password string
-	logLevel Level
+	logLevel LevelValue
 }
 
 func flags(args []string, o *opts) ([]string, error) {
@@ -91,9 +81,7 @@ func run(args []string) error {
 		return err
 	}
 
-	logger := NewLogger(o.logLevel)
-	debugLogger := debugLogAdapter{level.Debug(logger)}
-	ctx = hitron.ContextWithDebugLogger(ctx, debugLogger)
+	initLogger(o.logLevel)
 
 	cm, err := hitron.New(o.host, o.username, o.password)
 	if err != nil {

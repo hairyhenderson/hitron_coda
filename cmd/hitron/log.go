@@ -3,37 +3,40 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log/slog"
 	"os"
-
-	"github.com/go-kit/log"
-	"github.com/go-kit/log/level"
 )
 
-type Level struct {
-	lev level.Option
-	s   string
-}
+type LevelValue slog.Level
 
-var _ flag.Value = (*Level)(nil)
+var _ flag.Getter = (*LevelValue)(nil)
 
 // String implements flag.Value
-func (l *Level) String() string {
-	return l.s
+func (l LevelValue) String() string {
+	switch slog.Level(l) {
+	case slog.LevelDebug:
+		return "debug"
+	case slog.LevelInfo:
+		return "info"
+	case slog.LevelWarn:
+		return "warn"
+	case slog.LevelError:
+		return "error"
+	default:
+		return fmt.Sprintf("unknown(%d)", l)
+	}
 }
 
-// Set implements flag.Value
-func (l *Level) Set(s string) error {
-	l.s = s
-
+func (l *LevelValue) Set(s string) error {
 	switch s {
 	case "debug":
-		l.lev = level.AllowDebug()
+		*l = LevelValue(slog.LevelDebug)
 	case "info":
-		l.lev = level.AllowInfo()
+		*l = LevelValue(slog.LevelInfo)
 	case "warn":
-		l.lev = level.AllowWarn()
+		*l = LevelValue(slog.LevelWarn)
 	case "error":
-		l.lev = level.AllowError()
+		*l = LevelValue(slog.LevelError)
 	default:
 		return fmt.Errorf("unrecognized log level %q", s)
 	}
@@ -41,14 +44,13 @@ func (l *Level) Set(s string) error {
 	return nil
 }
 
-// NewLogger -
-func NewLogger(l Level) log.Logger {
-	logger := log.NewLogfmtLogger(log.NewSyncWriter(os.Stderr))
+func (l LevelValue) Get() any {
+	return slog.Level(l)
+}
 
-	// add common labels (displayed in order)
-	logger = log.With(logger, "ts", log.DefaultTimestampUTC)
-	logger = level.NewFilter(logger, l.lev)
-	logger = log.With(logger, "caller", log.DefaultCaller)
+// initLogger -
+func initLogger(l LevelValue) {
+	handler := slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: slog.Level(l)})
 
-	return logger
+	slog.SetDefault(slog.New(handler))
 }
