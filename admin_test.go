@@ -15,7 +15,7 @@ func TestCMReboot(t *testing.T) {
 	srv := staticResponseServer(t, body)
 
 	d := testCableModem(srv)
-	ctx := ContextWithDebugLogger(context.Background(), t)
+	ctx := context.Background()
 
 	o, err := d.CMReboot(ctx)
 	assert.NoError(t, err)

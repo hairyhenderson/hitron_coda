@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log/slog"
 	"net/http"
 	"net/http/cookiejar"
 	"net/http/httputil"
@@ -28,18 +29,17 @@ type debugTransport struct {
 }
 
 func (t *debugTransport) RoundTrip(req *http.Request) (*http.Response, error) {
-	debugLogger := debugLoggerFromContext(req.Context())
-	if debugLogger == nil {
+	if !slog.Default().Enabled(req.Context(), slog.LevelDebug) {
 		return t.rt.RoundTrip(req)
 	}
 
 	drq, _ := httputil.DumpRequest(req, true)
-	debugLogger.Logf("request: %s", drq)
+	slog.DebugContext(req.Context(), "dumping request", slog.String("request", string(drq)))
 
 	resp, err := t.rt.RoundTrip(req)
 	if err == nil {
 		drs, _ := httputil.DumpResponse(resp, true)
-		debugLogger.Logf("response: %s", drs)
+		slog.DebugContext(req.Context(), "dumping response", slog.String("response", string(drs)))
 	}
 
 	return resp, err
@@ -57,13 +57,18 @@ func New(host, username, password string) (*CableModem, error) {
 		return nil, err
 	}
 
+	tr := http.DefaultTransport
+	if slog.Default().Enabled(context.Background(), slog.LevelDebug) {
+		tr = &debugTransport{tr}
+	}
+
 	client := &http.Client{
 		Jar: jar,
 		// Ignore redirects
 		CheckRedirect: func(_ *http.Request, _ []*http.Request) error {
 			return http.ErrUseLastResponse
 		},
-		Transport: &debugTransport{http.DefaultTransport},
+		Transport: tr,
 	}
 
 	creds := credentials{username, password}
@@ -90,38 +95,6 @@ func (c *CableModem) url(s string) *url.URL {
 	}
 
 	return c.base.ResolveReference(p)
-}
-
-type debugLogger interface {
-	Logf(format string, args ...interface{})
-}
-
-type debugLoggerKey struct{}
-
-// ContextWithDebugLogger - add a logger for debugging the client
-func ContextWithDebugLogger(ctx context.Context,
-	l interface {
-		Logf(format string, args ...interface{})
-	},
-) context.Context {
-	return context.WithValue(ctx, debugLoggerKey{}, l)
-}
-
-type debugLoggerFunc func(format string, args ...interface{})
-
-func (f debugLoggerFunc) Logf(format string, args ...interface{}) {
-	f(format, args...)
-}
-
-func debugLoggerFromContext(ctx context.Context) debugLogger {
-	if l := ctx.Value(debugLoggerKey{}); l != nil {
-		dl, ok := l.(debugLogger)
-		if ok {
-			return dl
-		}
-	}
-
-	return debugLoggerFunc(func(_ string, _ ...interface{}) {})
 }
 
 func (c *CableModem) getJSON(ctx context.Context, path string, o interface{}) error {

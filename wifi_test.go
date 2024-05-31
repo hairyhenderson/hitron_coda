@@ -18,7 +18,7 @@ func TestWiFiAccessControl(t *testing.T) {
 	srv := staticResponseServer(t, body)
 	d := testCableModem(srv)
 
-	ctx := ContextWithDebugLogger(context.Background(), t)
+	ctx := context.Background()
 
 	p, err := d.WiFiAccessControl(ctx)
 	assert.NoError(t, err)
@@ -38,7 +38,7 @@ func TestWiFiAccessControlStatus(t *testing.T) {
 	srv := staticResponseServer(t, body)
 	d := testCableModem(srv)
 
-	ctx := ContextWithDebugLogger(context.Background(), t)
+	ctx := context.Background()
 
 	p, err := d.WiFiAccessControlStatus(ctx)
 	assert.NoError(t, err)
@@ -59,7 +59,7 @@ func TestWiFiGuestSSID(t *testing.T) {
 	srv := staticResponseServer(t, body)
 	d := testCableModem(srv)
 
-	ctx := ContextWithDebugLogger(context.Background(), t)
+	ctx := context.Background()
 
 	p, err := d.WiFiGuestSSID(ctx)
 	assert.NoError(t, err)
@@ -94,7 +94,7 @@ func TestWiFiRadios(t *testing.T) {
 	srv := staticResponseServer(t, body)
 	d := testCableModem(srv)
 
-	ctx := ContextWithDebugLogger(context.Background(), t)
+	ctx := context.Background()
 
 	p, err := d.WiFiRadios(ctx)
 	assert.NoError(t, err)
@@ -141,7 +141,7 @@ func TestWiFiRadioDetails(t *testing.T) {
 	srv := staticResponseServer(t, body)
 	d := testCableModem(srv)
 
-	ctx := ContextWithDebugLogger(context.Background(), t)
+	ctx := context.Background()
 
 	p, err := d.WiFiRadioDetails(ctx, 2)
 	assert.NoError(t, err)
@@ -192,7 +192,7 @@ func TestWiFiRadiosAdvanced(t *testing.T) {
 	srv := staticResponseServer(t, body)
 	d := testCableModem(srv)
 
-	ctx := ContextWithDebugLogger(context.Background(), t)
+	ctx := context.Background()
 
 	p, err := d.WiFiRadiosAdvanced(ctx)
 	assert.NoError(t, err)
@@ -278,7 +278,7 @@ func TestWiFiRadiosSurvey(t *testing.T) {
 	srv := staticResponseServer(t, body)
 	d := testCableModem(srv)
 
-	ctx := ContextWithDebugLogger(context.Background(), t)
+	ctx := context.Background()
 
 	p, err := d.WiFiRadiosSurvey(ctx)
 	assert.NoError(t, err)
@@ -328,7 +328,7 @@ func TestWiFiSSIDs(t *testing.T) {
 	srv := staticResponseServer(t, body)
 	d := testCableModem(srv)
 
-	ctx := ContextWithDebugLogger(context.Background(), t)
+	ctx := context.Background()
 
 	p, err := d.WiFiSSIDs(ctx)
 	assert.NoError(t, err)
@@ -370,7 +370,7 @@ func TestWiFiWPS(t *testing.T) {
 	srv := staticResponseServer(t, body)
 	d := testCableModem(srv)
 
-	ctx := ContextWithDebugLogger(context.Background(), t)
+	ctx := context.Background()
 
 	p, err := d.WiFiWPS(ctx)
 	assert.NoError(t, err)
@@ -400,7 +400,7 @@ func TestWiFiClient(t *testing.T) {
 	srv := staticResponseServer(t, body)
 	d := testCableModem(srv)
 
-	ctx := ContextWithDebugLogger(context.Background(), t)
+	ctx := context.Background()
 
 	p, err := d.WiFiClient(ctx)
 	assert.NoError(t, err)

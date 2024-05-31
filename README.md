@@ -44,4 +44,4 @@ fmt.Printf("Private LAN IP: %s\n", info.PrivLanIP)
 
 [The MIT License](http://opensource.org/licenses/MIT)
 
-Copyright (c) 2020-2021 Dave Henderson
+Copyright (c) 2020-2024 Dave Henderson
