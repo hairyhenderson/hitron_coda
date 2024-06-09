@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/hairyhenderson/hitron_coda/compare/v0.2.0...v0.2.1) (2024-06-08)
+
+
+### Dependencies
+
+* **go:** bump golang.org/x/text from 0.15.0 to 0.16.0 ([#68](https://github.com/hairyhenderson/hitron_coda/issues/68)) ([9674eb6](https://github.com/hairyhenderson/hitron_coda/commit/9674eb6cb783537f8762ca62a1f114b937f78a8d))
+
 ## [0.2.0](https://github.com/hairyhenderson/hitron_coda/compare/v0.1.1...v0.2.0) (2024-05-31)
 
 
