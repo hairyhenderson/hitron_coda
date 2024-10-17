@@ -158,6 +158,12 @@ func atoi64(s string) int64 {
 	return i
 }
 
+func atoui64(s string) uint64 {
+	i, _ := strconv.ParseUint(strings.TrimSpace(s), 10, 64)
+
+	return i
+}
+
 func atof64(s string) float64 {
 	f, _ := strconv.ParseFloat(strings.TrimSpace(s), 64)
 
@@ -175,34 +181,34 @@ const (
 	eib
 )
 
-func formattedBytesToInt64(s string) int64 {
-	i, err := strconv.ParseInt(strings.TrimSpace(s), 10, 64)
+func formattedBytesToUint64(s string) uint64 {
+	i, err := strconv.ParseUint(strings.TrimSpace(s), 10, 64)
 	if err == nil {
 		return i
 	}
 
 	s = strings.TrimSuffix(s, " Bytes")
 	if len(s) <= 1 {
-		return atoi64(s)
+		return atoui64(s)
 	}
 
 	switch s[len(s)-1] {
 	case 'B':
-		i = int64(atof64(s[:len(s)-1]))
+		i = uint64(atof64(s[:len(s)-1]))
 	case 'K':
-		i = int64(atof64(s[:len(s)-1]) * kib)
+		i = uint64(atof64(s[:len(s)-1]) * kib)
 	case 'M':
-		i = int64(atof64(s[:len(s)-1]) * mib)
+		i = uint64(atof64(s[:len(s)-1]) * mib)
 	case 'G':
-		i = int64(atof64(s[:len(s)-1]) * gib)
+		i = uint64(atof64(s[:len(s)-1]) * gib)
 	case 'T':
-		i = int64(atof64(s[:len(s)-1]) * tib)
+		i = uint64(atof64(s[:len(s)-1]) * tib)
 	case 'P':
-		i = int64(atof64(s[:len(s)-1]) * pib)
+		i = uint64(atof64(s[:len(s)-1]) * pib)
 	case 'E':
-		i = int64(atof64(s[:len(s)-1]) * eib)
+		i = uint64(atof64(s[:len(s)-1]) * eib)
 	default:
-		i = int64(atof64(s))
+		i = uint64(atof64(s))
 	}
 
 	return i

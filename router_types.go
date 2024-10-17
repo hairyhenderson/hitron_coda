@@ -28,12 +28,12 @@ type RouterSysInfo struct {
 	RFMac           net.HardwareAddr // :"74:9B:DE:AD:BE:EF",
 	SystemLanUptime time.Duration    // : "468117",
 	SystemWanUptime time.Duration    // :"468083",
-	LanRx           int64            // :"19601748772",
-	LanTx           int64            // :"141585555187",
-	WanRx           int64            // :"139788502458",
-	WanRxPkts       int64            // :"175946286",
-	WanTx           int64            // :"18787516468",
-	WanTxPkts       int64            // :"52845543",
+	LanRx           uint64           // :"19601748772",
+	LanTx           uint64           // :"141585555187",
+	WanRx           uint64           // :"139788502458",
+	WanRxPkts       uint64           // :"175946286",
+	WanTx           uint64           // :"18787516468",
+	WanTxPkts       uint64           // :"52845543",
 }
 
 //nolint:funlen
@@ -72,9 +72,9 @@ func (s RouterSysInfo) String() string {
 	sb.WriteString(")\n")
 
 	sb.WriteString("	Rx/Tx: ")
-	sb.WriteString(byteSize(uint64(s.LanRx)))
+	sb.WriteString(byteSize(s.LanRx))
 	sb.WriteString("/")
-	sb.WriteString(byteSize(uint64(s.LanTx)))
+	sb.WriteString(byteSize(s.LanTx))
 	sb.WriteString("\n")
 
 	sb.WriteString("WAN: ")
@@ -92,9 +92,9 @@ func (s RouterSysInfo) String() string {
 	sb.WriteString(")\n")
 
 	sb.WriteString("	Rx/Tx: ")
-	sb.WriteString(byteSize(uint64(s.WanRx)))
+	sb.WriteString(byteSize(s.WanRx))
 	sb.WriteString("/")
-	sb.WriteString(byteSize(uint64(s.WanTx)))
+	sb.WriteString(byteSize(s.WanTx))
 	sb.WriteString("\n")
 
 	sb.WriteString("	Rx/Tx Packets: ")
@@ -213,12 +213,12 @@ func (s *RouterSysInfo) UnmarshalJSON(b []byte) error {
 		return fmt.Errorf("failed to parse CIDR %q: %w", raw.PrivLanIP, err)
 	}
 
-	s.LanRx = formattedBytesToInt64(raw.LanRx)
-	s.LanTx = formattedBytesToInt64(raw.LanTx)
-	s.WanRx = formattedBytesToInt64(raw.WanRx)
-	s.WanRxPkts = atoi64(raw.WanRxPkts)
-	s.WanTx = formattedBytesToInt64(raw.WanTx)
-	s.WanTxPkts = atoi64(raw.WanTxPkts)
+	s.LanRx = formattedBytesToUint64(raw.LanRx)
+	s.LanTx = formattedBytesToUint64(raw.LanTx)
+	s.WanRx = formattedBytesToUint64(raw.WanRx)
+	s.WanRxPkts = atoui64(raw.WanRxPkts)
+	s.WanTx = formattedBytesToUint64(raw.WanTx)
+	s.WanTxPkts = atoui64(raw.WanTxPkts)
 
 	lanUp, err := parseUptime(raw.SystemLanUptime)
 	if err != nil {

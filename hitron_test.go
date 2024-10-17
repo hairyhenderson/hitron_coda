@@ -57,22 +57,22 @@ func TestURL(t *testing.T) {
 	assert.EqualValues(t, expected, u)
 }
 
-func TestFormattedBytesToInt64(t *testing.T) {
-	assert.Equal(t, int64(0), formattedBytesToInt64(""))
-	assert.Equal(t, int64(0), formattedBytesToInt64("0"))
-	assert.Equal(t, int64(0), formattedBytesToInt64("0 Bytes"))
-	assert.Equal(t, int64(0), formattedBytesToInt64("0M Bytes"))
-	assert.Equal(t, int64(0), formattedBytesToInt64("0.0G Bytes"))
+func TestFormattedBytesToUint64(t *testing.T) {
+	assert.Equal(t, uint64(0), formattedBytesToUint64(""))
+	assert.Equal(t, uint64(0), formattedBytesToUint64("0"))
+	assert.Equal(t, uint64(0), formattedBytesToUint64("0 Bytes"))
+	assert.Equal(t, uint64(0), formattedBytesToUint64("0M Bytes"))
+	assert.Equal(t, uint64(0), formattedBytesToUint64("0.0G Bytes"))
 
-	assert.Equal(t, int64(1), formattedBytesToInt64("1"))
-	assert.Equal(t, int64(1), formattedBytesToInt64("1B"))
-	assert.Equal(t, int64(1), formattedBytesToInt64("1B Bytes"))
-	assert.Equal(t, int64(42), formattedBytesToInt64("42 Bytes"))
-	assert.Equal(t, int64(kib), formattedBytesToInt64("1.0K Bytes"))
-	assert.Equal(t, int64(2*mib), formattedBytesToInt64("2.0M Bytes"))
+	assert.Equal(t, uint64(1), formattedBytesToUint64("1"))
+	assert.Equal(t, uint64(1), formattedBytesToUint64("1B"))
+	assert.Equal(t, uint64(1), formattedBytesToUint64("1B Bytes"))
+	assert.Equal(t, uint64(42), formattedBytesToUint64("42 Bytes"))
+	assert.Equal(t, uint64(kib), formattedBytesToUint64("1.0K Bytes"))
+	assert.Equal(t, uint64(2*mib), formattedBytesToUint64("2.0M Bytes"))
 
 	// 18.65 * 1TiB == 20505891858022.4, truncated to 20505891858022
-	assert.Equal(t, int64(20505891858022), formattedBytesToInt64("18.65T Bytes"))
+	assert.Equal(t, uint64(20505891858022), formattedBytesToUint64("18.65T Bytes"))
 }
 
 func TestByteSize(t *testing.T) {

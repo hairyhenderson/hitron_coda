@@ -26,7 +26,6 @@ func TestWiFiModeString(t *testing.T) {
 	}
 
 	for _, d := range testdata {
-		d := d
 		t.Run(d.expected, func(t *testing.T) {
 			assert.Equal(t, d.expected, d.in.String())
 		})
