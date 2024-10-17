@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.2.2](https://github.com/hairyhenderson/hitron_coda/compare/v0.2.1...v0.2.2) (2024-10-17)
+
+
+### Bug Fixes
+
+* **lint:** Expand packet fields in router.Sysinfo to uint64 ([#75](https://github.com/hairyhenderson/hitron_coda/issues/75)) ([6d7cfba](https://github.com/hairyhenderson/hitron_coda/commit/6d7cfbaf9bbd0ab78150b7ff55bc65dd4ccb8540))
+
+
+### Dependencies
+
+* **go:** bump golang.org/x/text from 0.16.0 to 0.18.0 ([#72](https://github.com/hairyhenderson/hitron_coda/issues/72)) ([90db9f1](https://github.com/hairyhenderson/hitron_coda/commit/90db9f108d335ee6c1a8c91635f4f93ee315f152))
+* **go:** bump golang.org/x/text from 0.18.0 to 0.19.0 ([#74](https://github.com/hairyhenderson/hitron_coda/issues/74)) ([1555e08](https://github.com/hairyhenderson/hitron_coda/commit/1555e08f3b09acc1f7104b862aa131edccc08cb3))
+
 ## [0.2.1](https://github.com/hairyhenderson/hitron_coda/compare/v0.2.0...v0.2.1) (2024-06-08)
 
 
