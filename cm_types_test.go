@@ -22,7 +22,6 @@ func TestParseDHCPLeaseTime(t *testing.T) {
 	}
 
 	for _, d := range testdata {
-		d := d
 		t.Run(d.in, func(t *testing.T) {
 			out := parseDHCPLeaseDuration(d.in)
 			assert.Equal(t, d.dur, out)
