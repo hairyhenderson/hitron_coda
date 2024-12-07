@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.2.3](https://github.com/hairyhenderson/hitron_coda/compare/v0.2.2...v0.2.3) (2024-12-07)
+
+
+### Dependencies
+
+* **go:** bump github.com/stretchr/testify from 1.9.0 to 1.10.0 ([#78](https://github.com/hairyhenderson/hitron_coda/issues/78)) ([d90b09e](https://github.com/hairyhenderson/hitron_coda/commit/d90b09e2501cb0a0d5f1fa266f03c2984a05aa48))
+* **go:** bump golang.org/x/text from 0.19.0 to 0.20.0 ([#76](https://github.com/hairyhenderson/hitron_coda/issues/76)) ([4f9180c](https://github.com/hairyhenderson/hitron_coda/commit/4f9180cf6b562bc4b6a1d3e6f4aca373c38cdff1))
+* **go:** bump golang.org/x/text from 0.20.0 to 0.21.0 ([#79](https://github.com/hairyhenderson/hitron_coda/issues/79)) ([2e8498a](https://github.com/hairyhenderson/hitron_coda/commit/2e8498afa4d03423feddc8115ca3cab1842af107))
+
 ## [0.2.2](https://github.com/hairyhenderson/hitron_coda/compare/v0.2.1...v0.2.2) (2024-10-17)
 
 
