@@ -38,25 +38,25 @@ type RouterSysInfo struct {
 
 //nolint:funlen
 func (s RouterSysInfo) String() string {
-	if s.Error != NoError && s.Error.Message != "" {
+	if s.Error != NoError && s.Message != "" {
 		return s.Error.String()
 	}
 
 	sb := strings.Builder{}
 	sb.WriteString("CMVersion:\n\tDeviceID: ")
-	sb.WriteString(s.CMVersion.DeviceID)
+	sb.WriteString(s.DeviceID)
 	sb.WriteString("\n\tModelName: ")
-	sb.WriteString(s.CMVersion.ModelName)
+	sb.WriteString(s.ModelName)
 	sb.WriteString("\n\tVendorName: ")
-	sb.WriteString(s.CMVersion.VendorName)
+	sb.WriteString(s.VendorName)
 	sb.WriteString("\n\tSerialNum: ")
-	sb.WriteString(s.CMVersion.SerialNum)
+	sb.WriteString(s.SerialNum)
 	sb.WriteString("\n\tHwVersion: ")
-	sb.WriteString(s.CMVersion.HwVersion)
+	sb.WriteString(s.HwVersion)
 	sb.WriteString("\n\tAPIVersion: ")
-	sb.WriteString(s.CMVersion.APIVersion)
+	sb.WriteString(s.APIVersion)
 	sb.WriteString("\n\tSoftwareVersion: ")
-	sb.WriteString(s.CMVersion.SoftwareVersion)
+	sb.WriteString(s.SoftwareVersion)
 	sb.WriteString("\n")
 
 	sb.WriteString("SystemTime: ")
@@ -250,7 +250,6 @@ func (s *RouterSysInfo) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-//nolint:gomnd
 func parseUptime(s string) (time.Duration, error) {
 	i, err := strconv.ParseInt(strings.TrimSpace(s), 10, 64)
 	if err == nil {

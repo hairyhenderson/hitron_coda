@@ -1,16 +1,19 @@
 name: Build
 on: [push]
 
+permissions:
+  contents: read
+
 jobs:
   test:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     container:
       image: ghcr.io/hairyhenderson/gomplate-ci-build:latest
     steps:
       - uses: actions/checkout@v4
       - run: make test
   lint:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     container:
       image: ghcr.io/hairyhenderson/gomplate-ci-build:latest
     steps:
