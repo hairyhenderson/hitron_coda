@@ -170,7 +170,6 @@ func atof64(s string) float64 {
 	return f
 }
 
-//nolint:gomnd
 const (
 	_byte = 1 << (10 * iota)
 	kib

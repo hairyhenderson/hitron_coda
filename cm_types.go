@@ -24,7 +24,7 @@ type CMVersion struct {
 }
 
 func (v CMVersion) String() string {
-	if v.Error != NoError && v.Error.Message != "" {
+	if v.Error != NoError && v.Message != "" {
 		return v.Error.String()
 	}
 
@@ -192,7 +192,7 @@ type CMSysInfo struct {
 }
 
 func (s CMSysInfo) String() string {
-	if s.Error != NoError && s.Error.Message != "" {
+	if s.Error != NoError && s.Message != "" {
 		return s.Error.String()
 	}
 
@@ -283,7 +283,6 @@ func parseDHCPLeaseDuration(s string) (dur time.Duration) {
 		return 0
 	}
 
-	//nolint:gomnd
 	multMap := map[byte]time.Duration{
 		'D': 24 * time.Hour,
 		'H': time.Hour,
