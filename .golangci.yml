@@ -39,7 +39,7 @@ linters:
     - unparam
     - unused
     - whitespace
-    - wsl
+    - wsl_v5
   settings:
     goconst:
       min-len: 2
@@ -61,6 +61,10 @@ linters:
       - common-false-positives
       - legacy
       - std-error-handling
+    rules:
+      - linters:
+          - revive
+        path: "internal/version"
     paths:
       - third_party$
       - builtin$

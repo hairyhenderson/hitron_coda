@@ -20,7 +20,7 @@ func TestLogin(t *testing.T) {
 		assert.Equal(t, "/Users/Login", r.URL.Path)
 		assert.Equal(t, http.MethodPost, r.Method)
 
-		err := r.ParseForm()
+		err := r.ParseForm() //nolint:gosec
 		assert.NoError(t, err)
 
 		model := r.Form.Get("model")
@@ -76,7 +76,7 @@ func TestLogout(t *testing.T) {
 			assert.Equal(t, "/Users/Login", r.URL.Path)
 			assert.Equal(t, http.MethodPost, r.Method)
 
-			err := r.ParseForm()
+			err := r.ParseForm() //nolint:gosec
 			assert.NoError(t, err)
 
 			model := r.Form.Get("model")

@@ -110,6 +110,7 @@ func (c *CableModem) sendRequest(ctx context.Context, method, path string, body,
 	contentType := ""
 
 	var reqBody io.Reader
+
 	switch b := body.(type) {
 	case io.Reader:
 		reqBody = b
