@@ -16,7 +16,7 @@ type credentials struct {
 }
 
 func (c credentials) String() string {
-	b, _ := json.Marshal(&c)
+	b, _ := json.Marshal(&c) //nolint:gosec
 
 	return string(b)
 }

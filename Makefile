@@ -78,7 +78,7 @@ lint:
 	@golangci-lint run --verbose --max-same-issues=0 --max-issues-per-linter=0
 
 ci-lint:
-	@golangci-lint run --verbose --max-same-issues=0 --max-issues-per-linter=0
+	@golangci-lint run --verbose --max-same-issues=0 --max-issues-per-linter=0 --new
 
 .PHONY: clean test lint ci-lint
 .DELETE_ON_ERROR:
