@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.2.4](https://github.com/hairyhenderson/hitron_coda/compare/v0.2.3...v0.2.4) (2026-03-17)
+
+
+### Dependencies
+
+* **actions:** bump actions/checkout from 4 to 6 ([#97](https://github.com/hairyhenderson/hitron_coda/issues/97)) ([4e127c4](https://github.com/hairyhenderson/hitron_coda/commit/4e127c4f83a295e3a27840147f4d89069f2f6b69))
+* **actions:** bump actions/labeler from 5 to 6 ([#93](https://github.com/hairyhenderson/hitron_coda/issues/93)) ([d8ebcd1](https://github.com/hairyhenderson/hitron_coda/commit/d8ebcd13cdeb03cc28f25a99c17435fc5304ef13))
+* **actions:** bump webiny/action-conventional-commits ([#100](https://github.com/hairyhenderson/hitron_coda/issues/100)) ([24ceeec](https://github.com/hairyhenderson/hitron_coda/commit/24ceeecb659d3a7406e4116b9fd7f85a63d62743))
+* **go:** bump github.com/stretchr/testify from 1.10.0 to 1.11.1 ([#92](https://github.com/hairyhenderson/hitron_coda/issues/92)) ([e0daf11](https://github.com/hairyhenderson/hitron_coda/commit/e0daf117a1de6a33cfde007b448d7e71c244872a))
+* **go:** bump golang.org/x/text from 0.26.0 to 0.27.0 ([#87](https://github.com/hairyhenderson/hitron_coda/issues/87)) ([45fd367](https://github.com/hairyhenderson/hitron_coda/commit/45fd367b54699e57c367dee2f2ce89993a899516))
+* **go:** bump golang.org/x/text from 0.27.0 to 0.33.0 ([#99](https://github.com/hairyhenderson/hitron_coda/issues/99)) ([9efdfed](https://github.com/hairyhenderson/hitron_coda/commit/9efdfed44b30586f446588ede983d78bde46f042))
+
 ## [0.2.3](https://github.com/hairyhenderson/hitron_coda/compare/v0.2.2...v0.2.3) (2025-06-14)
 
 
