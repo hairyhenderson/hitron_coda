@@ -14,12 +14,12 @@ jobs:
     container:
       image: ghcr.io/hairyhenderson/gomplate-ci-build:latest@sha256:fe6e86d7a56da48f5117dab0263317573e6155092a4672d9d0f591cf30a3b282
     steps:
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - run: make test
   lint:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/hairyhenderson/gomplate-ci-build:latest@sha256:fe6e86d7a56da48f5117dab0263317573e6155092a4672d9d0f591cf30a3b282
     steps:
-      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - run: make ci-lint
