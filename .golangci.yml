@@ -65,6 +65,15 @@ linters:
       - linters:
           - revive
         path: "internal/version"
+      # repeated literals are normal in table-driven tests
+      - linters:
+          - goconst
+        path: (.+)_test\.go
+      # test servers set bare cookies; cookie hardening isn't relevant here
+      - linters:
+          - gosec
+        path: (.+)_test\.go
+        text: G124
     paths:
       - third_party$
       - builtin$
