@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.2.4](https://github.com/hairyhenderson/hitron_coda/compare/v0.2.3...v0.2.4) (2026-10-17)
+
+
+### Bug Fixes
+
+* **gomod:** update module github.com/stretchr/testify to v1.12.1 ([#115](https://github.com/hairyhenderson/hitron_coda/issues/115)) ([ab8092a](https://github.com/hairyhenderson/hitron_coda/commit/ab8092a6036637c35dc3cc795608ee177b3f8a0f))
+* **gomod:** update module golang.org/x/text to v0.41.0 [security] ([#110](https://github.com/hairyhenderson/hitron_coda/issues/110)) ([64357c6](https://github.com/hairyhenderson/hitron_coda/commit/64357c6967c18411475990181baad4ce7d58b7c1))
+* **gomod:** update module golang.org/x/text to v0.43.0 ([#116](https://github.com/hairyhenderson/hitron_coda/issues/116)) ([56f7b0a](https://github.com/hairyhenderson/hitron_coda/commit/56f7b0af58ca35c4e37ead7c3a64737ac3e4b2fe))
+
+
+### Dependencies
+
+* **actions:** bump actions/checkout from 4 to 6 ([#97](https://github.com/hairyhenderson/hitron_coda/issues/97)) ([4e127c4](https://github.com/hairyhenderson/hitron_coda/commit/4e127c4f83a295e3a27840147f4d89069f2f6b69))
+* **actions:** bump actions/labeler from 5 to 6 ([#93](https://github.com/hairyhenderson/hitron_coda/issues/93)) ([d8ebcd1](https://github.com/hairyhenderson/hitron_coda/commit/d8ebcd13cdeb03cc28f25a99c17435fc5304ef13))
+* **actions:** bump webiny/action-conventional-commits ([#100](https://github.com/hairyhenderson/hitron_coda/issues/100)) ([24ceeec](https://github.com/hairyhenderson/hitron_coda/commit/24ceeecb659d3a7406e4116b9fd7f85a63d62743))
+* **go:** bump github.com/stretchr/testify from 1.10.0 to 1.11.1 ([#92](https://github.com/hairyhenderson/hitron_coda/issues/92)) ([e0daf11](https://github.com/hairyhenderson/hitron_coda/commit/e0daf117a1de6a33cfde007b448d7e71c244872a))
+* **go:** bump golang.org/x/text from 0.26.0 to 0.27.0 ([#87](https://github.com/hairyhenderson/hitron_coda/issues/87)) ([45fd367](https://github.com/hairyhenderson/hitron_coda/commit/45fd367b54699e57c367dee2f2ce89993a899516))
+* **go:** bump golang.org/x/text from 0.27.0 to 0.33.0 ([#99](https://github.com/hairyhenderson/hitron_coda/issues/99)) ([9efdfed](https://github.com/hairyhenderson/hitron_coda/commit/9efdfed44b30586f446588ede983d78bde46f042))
+
 ## [0.2.3](https://github.com/hairyhenderson/hitron_coda/compare/v0.2.2...v0.2.3) (2025-06-14)
 
 
