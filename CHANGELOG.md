@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.5](https://github.com/hairyhenderson/hitron_coda/compare/v0.2.4...v0.2.5) (2026-10-17)
+
+
+### Dependencies
+
+* **go:** use Go toolchain 1.27.2 ([#122](https://github.com/hairyhenderson/hitron_coda/issues/122)) ([bed14d0](https://github.com/hairyhenderson/hitron_coda/commit/bed14d00931e879f3cdfc6c5cc51439e7748c14b))
+
 ## [0.2.4](https://github.com/hairyhenderson/hitron_coda/compare/v0.2.3...v0.2.4) (2026-10-17)
 
 
