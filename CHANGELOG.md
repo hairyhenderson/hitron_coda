@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.6](https://github.com/hairyhenderson/hitron_coda/compare/v0.2.5...v0.2.6) (2026-11-24)
+
+
+### Bug Fixes
+
+* **gomod:** update module golang.org/x/text to v0.44.0 ([#127](https://github.com/hairyhenderson/hitron_coda/issues/127)) ([d585724](https://github.com/hairyhenderson/hitron_coda/commit/d5857248ee39f1ef259b7fe2400653baa543881b))
+
 ## [0.2.5](https://github.com/hairyhenderson/hitron_coda/compare/v0.2.4...v0.2.5) (2026-10-17)
 
 
